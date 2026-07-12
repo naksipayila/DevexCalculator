@@ -23,6 +23,7 @@ A focused, dark-themed calculator for Roblox developers. Convert Robux to USD an
 - [Gestures & Shortcuts](#gestures--shortcuts)
 - [Tax Calculator](#tax-calculator)
 - [Exchange Rate](#exchange-rate)
+- [Install as an App](#install-as-an-app)
 - [How It Works](#how-it-works)
 - [File Structure](#file-structure)
 - [Development](#development)
@@ -123,6 +124,14 @@ GET https://open.er-api.com/v6/latest/USD
 
 ---
 
+## Install as an App
+
+When hosted through HTTPS or `localhost`, the calculator can be installed as a standalone app from the browser's install menu. After the first visit, the calculator interface is available offline. The USD/TRY rate continues to use the most recently saved value when the exchange-rate API is unavailable.
+
+Service workers do not run when `index.html` is opened with `file://`. Use a local web server for development.
+
+---
+
 ## How It Works
 
 | Constant | Value | Location |
@@ -162,6 +171,10 @@ devex-calculator/
 ├── style.css       Dark theme, responsive breakpoints, animations
 ├── app.js          Conversion, tax calculator, API, gestures, state
 ├── favicon.png     Browser tab icon
+├── icon-192.png    PWA install icon
+├── icon-512.png    PWA install icon
+├── manifest.webmanifest  PWA metadata
+├── sw.js            Offline app-shell cache
 └── README.md
 ```
 

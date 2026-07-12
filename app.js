@@ -446,3 +446,7 @@ loadSavedState();
 updateUI();
 fetchExchangeRate();
 setInterval(fetchExchangeRate, 24 * 60 * 60 * 1000);
+
+if ('serviceWorker' in navigator && window.isSecureContext) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
