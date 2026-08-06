@@ -29,7 +29,3 @@ node --check app.js
 
 The project uses plain HTML, CSS, and JavaScript. Pushes to `main` are
 deployed through GitHub Pages.
-
-## License
-
-MIT
