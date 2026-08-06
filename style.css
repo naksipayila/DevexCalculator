@@ -75,93 +75,37 @@ button {
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;
-    animation: fadeUp 0.35s ease-out both;
 }
 
 .card-inner {
     border-radius: var(--radius);
 }
 
-.tool-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1.35rem 1.35rem 0.35rem;
-    animation: staggerIn 0.3s ease-out both;
-    animation-delay: 0.15s;
-}
-
-.tool-eyebrow {
-    background: linear-gradient(135deg, var(--accent), #7dc4ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    margin: 0;
-}
-
-.tool-title {
-    color: var(--text);
-    font-size: 1.65rem;
-    font-weight: 800;
-    line-height: 1.05;
-    margin: 0;
-    margin-top: -0.08rem;
-}
-
-.eyebrow-row {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-}
-
-.aty-tag {
-    font-size: 0.56rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--text-soft);
-    text-transform: uppercase;
-}
-
-.header-dot {
-    color: var(--text-soft);
-    font-size: 0.62rem;
-    font-weight: 700;
-}
-
-.header-buttons {
-    display: flex;
-    gap: 0.5rem;
-    flex-shrink: 0;
-}
-
-.header-icon-btn {
-    flex: 0 0 auto;
-    width: 3rem;
-    height: 3rem;
-    padding: 0;
+.tax-launch-btn {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--surface-soft);
     border: 1px solid rgba(74, 163, 255, 0.32);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius);
     color: #d9ecff;
+    gap: 0.55rem;
+    font-size: 0.8rem;
+    font-weight: 800;
     cursor: pointer;
     transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
-.header-icon-btn:hover {
+.tax-launch-btn:hover {
     background: var(--surface-raised);
     border-color: rgba(74, 163, 255, 0.5);
     color: #ffffff;
 }
 
-.header-icon-btn:active {
+.tax-launch-btn:active {
     transform: scale(0.94);
 }
 
@@ -185,15 +129,6 @@ button {
     flex-direction: column;
     gap: 0.8rem;
 }
-
-.interaction-area > * {
-    animation: staggerIn 0.3s ease-out both;
-}
-
-.interaction-area > .input-section { animation-delay: 0.25s; }
-.interaction-area > .quick-grid { animation-delay: 0.35s; }
-.interaction-area > .summary-panel { animation-delay: 0.45s; }
-.interaction-area > .rate-panel { animation-delay: 0.55s; }
 
 .input-section {
     display: flex;
@@ -697,39 +632,6 @@ button:focus-visible {
     flex-direction: column;
 }
 
-.drawer-info-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.info-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-}
-
-.info-section-label {
-    font-size: 0.62rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-soft);
-}
-
-.info-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.55rem;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    line-height: 1.5;
-}
-
-.info-item strong {
-    color: var(--text);
-}
-
 .tax-input-group {
     display: flex;
     flex-direction: column;
@@ -777,25 +679,6 @@ button:focus-visible {
 
     .app-container {
         max-width: 22rem;
-    }
-
-    .tool-header {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        padding: 0.875rem 0.875rem 0.15rem;
-    }
-
-    .tool-eyebrow {
-        font-size: 0.625rem;
-    }
-
-    .tool-title {
-        font-size: 1.35rem;
-    }
-
-    .aty-tag {
-        font-size: 0.5rem;
-        padding: 0.12rem 0.34rem;
     }
 
     .devex-chip {
@@ -912,10 +795,6 @@ button:focus-visible {
         height: 1.2rem;
     }
 
-    .header-icon-btn {
-        width: 2.6rem;
-        height: 2.6rem;
-    }
 }
 
 @media (max-width: 380px) {
@@ -923,14 +802,9 @@ button:focus-visible {
         padding: 0.5rem;
     }
 
-    .tool-header,
     .interaction-area {
         padding-left: 0.75rem;
         padding-right: 0.75rem;
-    }
-
-    .tool-title {
-        font-size: 1.25rem;
     }
 
     .quick-grid {
@@ -954,28 +828,6 @@ button:focus-visible {
 
     #summaryTry {
         font-size: 1.35rem;
-    }
-}
-
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-@keyframes staggerIn {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
 

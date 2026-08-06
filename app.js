@@ -28,9 +28,6 @@ const summaryTry = document.getElementById('summaryTry');
 const taxDrawer = document.getElementById('taxDrawer');
 const openTaxBtn = document.getElementById('openTaxBtn');
 const closeTaxBtn = document.getElementById('closeTaxBtn');
-const infoDrawer = document.getElementById('infoDrawer');
-const openInfoBtn = document.getElementById('openInfoBtn');
-const closeInfoBtn = document.getElementById('closeInfoBtn');
 const netRobuxInput = document.getElementById('netRobuxInput');
 const grossRobuxInput = document.getElementById('grossRobuxInput');
 const taxAmountDisplay = document.getElementById('taxAmountDisplay');
@@ -353,21 +350,6 @@ refreshRateBtn.addEventListener('click', async () => {
     }, 500);
 });
 
-openInfoBtn.addEventListener('click', () => {
-    infoDrawer.classList.add('open');
-});
-
-const closeInfoDrawer = () => {
-    infoDrawer.classList.remove('open');
-};
-
-closeInfoBtn.addEventListener('click', closeInfoDrawer);
-infoDrawer.addEventListener('click', (e) => {
-    if (e.target === infoDrawer) {
-        closeInfoDrawer();
-    }
-});
-
 openTaxBtn.addEventListener('click', () => {
     taxDrawer.classList.add('open');
     netRobuxInput.value = '';
@@ -388,9 +370,7 @@ taxDrawer.addEventListener('click', (e) => {
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-        if (infoDrawer.classList.contains('open')) {
-            closeInfoDrawer();
-        } else if (taxDrawer.classList.contains('open')) {
+        if (taxDrawer.classList.contains('open')) {
             closeDrawer();
         }
     }
