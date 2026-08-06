@@ -20,12 +20,3 @@ Open `index.html` in a browser, or visit the live site above.
 Enter a Robux amount to see its USD and TRY value. The exchange rate can be
 edited manually or refreshed from the API. Use the `Tax Calculator` button at
 the bottom for Roblox fee calculations.
-
-## Development
-
-```bash
-node --check app.js
-```
-
-The project uses plain HTML, CSS, and JavaScript. Pushes to `main` are
-deployed through GitHub Pages.
