@@ -15,8 +15,6 @@ let animFrameId = null;
 
 const mainInput = document.getElementById('mainInput');
 const inputWrapper = document.getElementById('inputWrapper');
-const inputPrefix = document.getElementById('inputPrefix');
-const inputLabel = document.getElementById('inputLabel');
 const clearBtn = document.getElementById('clearBtn');
 const quickGrid = document.getElementById('quickGrid');
 
@@ -90,10 +88,6 @@ const formatUsdInput = (value) => {
     });
 };
 
-const formatUsd = (value) => {
-    return `$${formatUsdInput(value)}`;
-};
-
 const formatCurrencyTRY = (val) => {
     return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(val);
 };
@@ -157,7 +151,7 @@ const loadSavedState = () => {
     }
 };
 
-const updateSummary = (rawUsd, rawRobux, tryDisplay, usdDisplay) => {
+const updateSummary = (rawUsd, tryDisplay) => {
     if (document.activeElement !== summaryUsdInput) {
         const newUsd = rawUsd || 0;
         animateNumber(summaryUsdInput, prevUsdValue, newUsd, formatUsdInput, 250);
@@ -222,15 +216,11 @@ const addAmount = (amount) => {
 
 const updateUI = () => {
     const rawUsd = parseUsd(usd);
-    const rawRobux = parseRobux(robux);
-    const usdDisplay = formatUsd(rawUsd);
     const tryDisplay = formatCurrencyTRY(rawUsd * tryRate);
 
-    inputLabel.textContent = 'Robux';
-    inputPrefix.innerHTML = '<span class="prefix-robux">R$</span>';
     mainInput.value = formatNumber(robux);
 
-    updateSummary(rawUsd, rawRobux, tryDisplay, usdDisplay);
+    updateSummary(rawUsd, tryDisplay);
 
     if (document.activeElement !== tryRateInput) {
         tryRateInput.value = tryRate.toFixed(2);
@@ -294,31 +284,15 @@ mainInput.addEventListener('blur', () => {
     inputWrapper.classList.remove('focused');
 });
 
-let clearGuard = false;
-
 const handleClear = () => {
-    if (clearGuard) return;
-    clearGuard = true;
-
     mainInput.blur();
     summaryUsdInput.blur();
     clear();
     triggerFlash();
     updateUI();
-
-    requestAnimationFrame(() => {
-        clearGuard = false;
-    });
 };
 
-clearBtn.addEventListener('pointerup', (e) => {
-    e.preventDefault();
-    handleClear();
-});
-
-clearBtn.addEventListener('click', (e) => {
-    handleClear();
-});
+clearBtn.addEventListener('click', handleClear);
 
 tryRateInput.addEventListener('input', (e) => {
     const val = parseUsd(e.target.value);
@@ -328,10 +302,8 @@ tryRateInput.addEventListener('input', (e) => {
         setStoredItem(STORAGE_KEYS.tryRateTimestamp, Date.now().toString());
 
         const rawUsd = parseUsd(usd);
-        const rawRobux = parseRobux(robux);
-        const usdDisplay = formatUsd(rawUsd);
         const tryDisplay = formatCurrencyTRY(rawUsd * tryRate);
-        updateSummary(rawUsd, rawRobux, tryDisplay, usdDisplay);
+        updateSummary(rawUsd, tryDisplay);
     }
 });
 

@@ -19,66 +19,62 @@
 <body>
     <div class="app-container">
         <div class="card-container">
-            <div class="card-inner">
-                <main class="interaction-area">
-                    <section class="input-section">
-                        <div class="input-wrapper" id="inputWrapper">
-                            <div class="input-heading">
-                                <label class="input-label" id="inputLabel">Robux</label>
-                            </div>
-
-                            <div class="input-value-row">
-                                <div class="input-prefix" id="inputPrefix">
-                                    <span class="prefix-robux">R$</span>
-                                </div>
-                                <input type="text" id="mainInput" placeholder="0" autocomplete="off" inputmode="numeric" />
-                            </div>
-
-                            <button class="control-btn clear-btn" id="clearBtn" title="Clear" aria-label="Clear">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                            </button>
+            <main class="interaction-area">
+                <section>
+                    <div class="input-wrapper" id="inputWrapper">
+                        <div class="input-heading">
+                            <label class="input-label">Robux</label>
                         </div>
-                    </section>
 
-                    <div class="quick-grid" id="quickGrid"></div>
-
-                    <section class="summary-panel" aria-label="Conversion summary">
-                        <article class="summary-row summary-row-primary summary-row-copyable">
-                            <div class="summary-heading">
-                                <span>USD</span>
+                        <div class="input-value-row">
+                            <div class="input-prefix">
+                                <span class="prefix-robux">R$</span>
                             </div>
-                            <div class="summary-usd-input-wrapper" id="summaryUsdWrapper">
-                                <span class="summary-usd-prefix">$</span>
-                                <input type="text" id="summaryUsdInput" value="0.00" autocomplete="off" inputmode="decimal" aria-label="USD Amount" />
-                            </div>
-                        </article>
-
-                        <article class="summary-row">
-                            <span>TRY</span>
-                            <strong id="summaryTry">0,00 ₺</strong>
-                        </article>
-                    </section>
-
-                    <section class="rate-panel" aria-label="Rate information">
-                        <div class="rate-devex-row">
-                            <span class="devex-chip">1 R$ = $0.0038</span>
+                            <input type="text" id="mainInput" placeholder="0" autocomplete="off" inputmode="numeric" />
                         </div>
-                        <div class="rate-exchange-row">
-                            <span>1 USD =</span>
-                            <input type="number" step="0.01" id="tryRateInput" class="inline-rate-input" value="46.00">
-                            <span>TRY</span>
-                            <button class="refresh-rate-btn" id="refreshRateBtn" title="Refresh Rate" aria-label="Refresh Rate">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-                            </button>
-                        </div>
-                    </section>
 
-                    <button class="tax-launch-btn" id="openTaxBtn" title="Tax Calculator" aria-label="Tax Calculator">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><path d="M8 10h.01"></path><path d="M12 10h.01"></path><path d="M16 10h.01"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
-                        <span>Tax Calculator</span>
-                    </button>
-                </main>
-            </div>
+                        <button class="control-btn clear-btn" id="clearBtn" title="Clear" aria-label="Clear">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                        </button>
+                    </div>
+                </section>
+
+                <div class="quick-grid" id="quickGrid"></div>
+
+                <section class="summary-panel" aria-label="Conversion summary">
+                    <article class="summary-row summary-row-primary">
+                        <span>USD</span>
+                        <div class="summary-usd-input-wrapper" id="summaryUsdWrapper">
+                            <span class="summary-usd-prefix">$</span>
+                            <input type="text" id="summaryUsdInput" value="0.00" autocomplete="off" inputmode="decimal" aria-label="USD Amount" />
+                        </div>
+                    </article>
+
+                    <article class="summary-row">
+                        <span>TRY</span>
+                        <strong id="summaryTry">0,00 ₺</strong>
+                    </article>
+                </section>
+
+                <section class="rate-panel" aria-label="Rate information">
+                    <div class="rate-devex-row">
+                        <span class="devex-chip">1 R$ = $0.0038</span>
+                    </div>
+                    <div class="rate-exchange-row">
+                        <span>1 USD =</span>
+                        <input type="number" step="0.01" id="tryRateInput" class="inline-rate-input" value="46.00">
+                        <span>TRY</span>
+                        <button class="refresh-rate-btn" id="refreshRateBtn" title="Refresh Rate" aria-label="Refresh Rate">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                        </button>
+                    </div>
+                </section>
+
+                <button class="tax-launch-btn" id="openTaxBtn" title="Tax Calculator" aria-label="Tax Calculator">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><path d="M8 10h.01"></path><path d="M12 10h.01"></path><path d="M16 10h.01"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
+                    <span>Tax Calculator</span>
+                </button>
+            </main>
         </div>
 
     </div>
@@ -92,31 +88,29 @@
                 </button>
             </div>
 
-            <div class="drawer-body">
-                <div class="tax-input-group">
-                    <label class="tax-label">Net Robux (Amount Received)</label>
-                    <div class="tax-input-wrapper">
-                        <span class="tax-prefix">R$</span>
-                        <input type="text" id="netRobuxInput" placeholder="0">
-                    </div>
+            <div class="tax-input-group">
+                <label class="tax-label">Net Robux (Amount Received)</label>
+                <div class="tax-input-wrapper">
+                    <span class="tax-prefix">R$</span>
+                    <input type="text" id="netRobuxInput" placeholder="0">
                 </div>
+            </div>
 
-                <div class="tax-input-group">
-                    <label class="tax-label">Gross Robux (Sale Price / Gamepass Price)</label>
-                    <div class="tax-input-wrapper">
-                        <span class="tax-prefix">R$</span>
-                        <input type="text" id="grossRobuxInput" placeholder="0">
-                        <button class="tax-copy-btn" id="grossCopyBtn" title="Copy" aria-label="Copy Gross Robux">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        </button>
-                    </div>
+            <div class="tax-input-group">
+                <label class="tax-label">Gross Robux (Sale Price / Gamepass Price)</label>
+                <div class="tax-input-wrapper">
+                    <span class="tax-prefix">R$</span>
+                    <input type="text" id="grossRobuxInput" placeholder="0">
+                    <button class="tax-copy-btn" id="grossCopyBtn" title="Copy" aria-label="Copy Gross Robux">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
                 </div>
+            </div>
 
-                <div class="tax-info-box">
-                    <div class="tax-info-row">
-                        <span>Roblox Fee (30%):</span>
-                        <span id="taxAmountDisplay">0 R$</span>
-                    </div>
+            <div class="tax-info-box">
+                <div class="tax-info-row">
+                    <span>Roblox Fee (30%):</span>
+                    <span id="taxAmountDisplay">0 R$</span>
                 </div>
             </div>
         </div>
