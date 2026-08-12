@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css?v=38">
     <link rel="icon" type="image/png" sizes="96x96" href="favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
@@ -40,7 +40,7 @@
                 <section class="summary-panel" aria-label="Conversion summary">
                     <article class="summary-row">
                         <span>USD</span>
-                        <label class="summary-value-row summary-usd-input-wrapper" id="summaryUsdWrapper">
+                        <label class="summary-value-row summary-usd-input-wrapper is-zero" id="summaryUsdWrapper">
                             <span class="summary-value-prefix summary-usd-prefix">$</span>
                             <input type="text" id="summaryUsdInput" value="0.00" autocomplete="off" inputmode="decimal" aria-label="USD Amount" />
                         </label>
@@ -48,7 +48,7 @@
 
                     <article class="summary-row">
                         <span>TRY</span>
-                        <div class="summary-value-row summary-try-value">
+                        <div class="summary-value-row summary-try-value is-zero">
                             <span class="summary-value-prefix summary-try-prefix">₺</span>
                             <strong id="summaryTry">0,00</strong>
                         </div>
@@ -111,6 +111,6 @@
     </div>
 
     <div class="toast" id="toast"></div>
-    <script src="app.js"></script>
+    <script src="app.js?v=38"></script>
 </body>
 </html>

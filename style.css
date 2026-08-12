@@ -290,7 +290,7 @@ button svg {
     white-space: nowrap;
     margin-left: 0;
     text-align: left;
-    transition: transform 0.18s ease, color 0.18s ease;
+    transition: transform 0.18s ease;
 }
 
 .summary-value-row {
@@ -354,6 +354,15 @@ button svg {
     font-weight: 800;
     padding: 0;
     text-align: left;
+}
+
+.summary-usd-input-wrapper.is-zero #summaryUsdInput,
+.summary-try-value.is-zero #summaryTry {
+    color: #5f6e84;
+}
+
+.summary-try-value:not(.is-zero) #summaryTry {
+    color: var(--text) !important;
 }
 
 .summary-row strong.flash {

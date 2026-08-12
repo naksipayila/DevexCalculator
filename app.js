@@ -18,6 +18,7 @@ const tryRateInput = document.getElementById('tryRateInput');
 const summaryUsdWrapper = document.getElementById('summaryUsdWrapper');
 const summaryUsdInput = document.getElementById('summaryUsdInput');
 const summaryTry = document.getElementById('summaryTry');
+const summaryTryWrapper = summaryTry.closest('.summary-try-value');
 const taxDrawer = document.getElementById('taxDrawer');
 const openTaxBtn = document.getElementById('openTaxBtn');
 const closeTaxBtn = document.getElementById('closeTaxBtn');
@@ -120,6 +121,8 @@ const updateSummary = (rawUsd, tryDisplay) => {
     if (document.activeElement !== summaryUsdInput) {
         summaryUsdInput.value = formatUsdInput(rawUsd || 0);
     }
+    summaryUsdWrapper.classList.toggle('is-zero', !rawUsd);
+    summaryTryWrapper.classList.toggle('is-zero', !rawUsd);
     summaryTry.textContent = tryDisplay;
 };
 
