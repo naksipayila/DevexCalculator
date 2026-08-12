@@ -133,7 +133,7 @@ button svg {
 
 .tax-input-wrapper {
     background: var(--surface-soft);
-    border: 1px solid var(--border);
+    border: 0;
     border-radius: var(--radius);
 }
 
@@ -154,7 +154,6 @@ button svg {
 
 .tax-input-wrapper:focus-within {
     background: var(--surface-raised);
-    border-color: var(--accent);
 }
 
 .input-prefix {
@@ -264,6 +263,10 @@ button svg {
     gap: 1rem;
 }
 
+.summary-row:first-child {
+    background: var(--surface-soft);
+}
+
 .summary-row + .summary-row {
     border-top: 1px solid var(--border);
 }
@@ -310,7 +313,7 @@ button svg {
     align-items: baseline;
     justify-content: flex-end;
     margin-left: 1rem;
-    background: var(--surface-soft);
+    background: transparent;
     color: #ffffff;
     cursor: text;
     touch-action: manipulation;
@@ -422,7 +425,7 @@ button svg {
 .inline-rate-input {
     width: 3.55rem;
     background: var(--surface-soft);
-    border: 1px solid var(--border);
+    border: 0;
     border-radius: var(--radius-sm);
     color: var(--text);
     font-size: 0.72rem;
