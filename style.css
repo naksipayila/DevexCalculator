@@ -100,8 +100,7 @@ button {
 }
 
 .interaction-area > section,
-.interaction-area > .rate-panel,
-.interaction-area > .tax-launch-btn {
+.interaction-area > .rate-panel {
     width: 100%;
 }
 
@@ -130,17 +129,13 @@ button {
 }
 
 .input-wrapper {
-    position: relative;
     display: grid;
     width: 100%;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
         "heading clear"
         "value clear";
-    align-items: stretch;
-    justify-content: center;
     gap: 0.38rem;
-    overflow: hidden;
     min-height: 4rem;
     padding: 0.75rem 0.65rem 0.75rem 0.875rem;
 }
@@ -311,6 +306,7 @@ button {
     color: #ffffff;
     font-size: 1.9rem;
     font-weight: 800;
+    margin-left: 0.25rem;
     letter-spacing: 0;
     line-height: 1.05;
     text-transform: none;
@@ -519,7 +515,6 @@ button:focus-visible {
 }
 
 .tax-input-wrapper {
-    position: relative;
     display: flex;
     padding: 0.625rem 0.75rem;
 }

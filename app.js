@@ -213,7 +213,7 @@ clearBtn.addEventListener('click', handleClear);
 
 tryRateInput.addEventListener('input', (e) => {
     const val = parseUsd(e.target.value);
-    if (!isNaN(val) && val > 0) {
+    if (val > 0) {
         tryRate = val;
         setStoredItem(STORAGE_KEYS.tryRate, tryRate.toString());
         setStoredItem(STORAGE_KEYS.tryRateTimestamp, Date.now().toString());
