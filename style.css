@@ -16,7 +16,7 @@
     --accent: #66a8e8;
     --accent-soft: rgba(102, 168, 232, 0.12);
     --danger: #fb7185;
-    --radius: 6px;
+    --radius: 8px;
     --radius-sm: 4px;
     --value-box-height: 4.5625rem;
 }
@@ -148,7 +148,7 @@ button svg {
     gap: 0.38rem;
     background: var(--surface-soft);
     border: 0;
-    border-radius: 0;
+    border-radius: var(--radius);
     height: var(--value-box-height);
     min-height: 0;
     padding: 0.75rem 0.65rem 0.75rem 0.875rem;
@@ -438,7 +438,7 @@ button svg {
     width: 3.55rem;
     background: var(--surface-soft);
     border: 0;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius);
     color: var(--text);
     font-size: 0.72rem;
     font-weight: 800;
