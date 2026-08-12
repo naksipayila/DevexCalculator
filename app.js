@@ -128,17 +128,11 @@ const updateSummary = (rawUsd, tryDisplay) => {
 
 const fetchExchangeRate = async () => {
     const cachedRate = getStoredItem(STORAGE_KEYS.tryRate);
-    const cachedTimestamp = getStoredItem(STORAGE_KEYS.tryRateTimestamp);
-    const oneDay = 24 * 60 * 60 * 1000;
-
-    if (cachedRate && cachedTimestamp && (Date.now() - parseInt(cachedTimestamp, 10) < oneDay)) {
-        tryRate = parseFloat(cachedRate);
-        updateUI();
-        return;
-    }
 
     try {
-        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const response = await fetch('https://open.er-api.com/v6/latest/USD', {
+            cache: 'no-store'
+        });
 
         if (!response.ok) {
             throw new Error(`Rate service did not respond: ${response.status}`);
