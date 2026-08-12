@@ -15,7 +15,6 @@ const mainInput = document.getElementById('mainInput');
 const clearBtn = document.getElementById('clearBtn');
 
 const tryRateInput = document.getElementById('tryRateInput');
-const refreshRateBtn = document.getElementById('refreshRateBtn');
 const summaryUsdWrapper = document.getElementById('summaryUsdWrapper');
 const summaryUsdInput = document.getElementById('summaryUsdInput');
 const summaryTry = document.getElementById('summaryTry');
@@ -84,8 +83,11 @@ const formatUsdInput = (value) => {
     });
 };
 
-const formatCurrencyTRY = (val) => {
-    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(val);
+const formatTryAmount = (val) => {
+    return new Intl.NumberFormat('tr-TR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(val);
 };
 
 const showToast = (message) => {
@@ -169,7 +171,7 @@ const triggerFlash = () => {
 
 const updateUI = () => {
     const rawUsd = parseUsd(usd);
-    const tryDisplay = formatCurrencyTRY(rawUsd * tryRate);
+    const tryDisplay = formatTryAmount(rawUsd * tryRate);
 
     mainInput.value = formatNumber(robux);
 
@@ -185,9 +187,11 @@ summaryUsdInput.addEventListener('input', (e) => {
     updateUI();
 });
 
-summaryUsdInput.addEventListener('click', () => {
+const startUsdEditing = () => {
     summaryUsdInput.value = '';
-});
+};
+
+summaryUsdInput.addEventListener('click', startUsdEditing);
 
 summaryUsdInput.addEventListener('blur', () => {
     updateUI();
@@ -220,24 +224,13 @@ tryRateInput.addEventListener('input', (e) => {
         setStoredItem(STORAGE_KEYS.tryRateTimestamp, Date.now().toString());
 
         const rawUsd = parseUsd(usd);
-        const tryDisplay = formatCurrencyTRY(rawUsd * tryRate);
+        const tryDisplay = formatTryAmount(rawUsd * tryRate);
         updateSummary(rawUsd, tryDisplay);
     }
 });
 
 tryRateInput.addEventListener('blur', () => {
     updateUI();
-});
-
-refreshRateBtn.addEventListener('click', async () => {
-    refreshRateBtn.classList.add('spinning');
-    removeStoredItem(STORAGE_KEYS.tryRate);
-    removeStoredItem(STORAGE_KEYS.tryRateTimestamp);
-    await fetchExchangeRate();
-
-    setTimeout(() => {
-        refreshRateBtn.classList.remove('spinning');
-    }, 500);
 });
 
 openTaxBtn.addEventListener('click', () => {
@@ -304,6 +297,7 @@ document.getElementById('grossCopyBtn').addEventListener('click', () => {
 });
 
 summaryUsdWrapper.addEventListener('pointerdown', (e) => {
+    startUsdEditing();
     if (e.target !== summaryUsdInput) {
         e.preventDefault();
         summaryUsdInput.focus();

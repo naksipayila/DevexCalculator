@@ -199,7 +199,6 @@ button svg {
 }
 
 .control-btn,
-.refresh-rate-btn,
 .drawer-close-btn {
     background: transparent;
     border: none;
@@ -213,7 +212,7 @@ button svg {
 }
 
 .control-btn:active,
-.refresh-rate-btn:active {
+.drawer-close-btn:active {
     transform: scale(0.94);
 }
 
@@ -233,7 +232,6 @@ button svg {
     }
 }
 
-.refresh-rate-btn:hover,
 .drawer-close-btn:hover {
     color: var(--text);
     background-color: var(--surface-raised);
@@ -242,8 +240,7 @@ button svg {
 .summary-panel {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+    gap: 0.4rem;
 }
 
 .tax-info-box {
@@ -256,19 +253,14 @@ button svg {
     min-width: 0;
     height: 3.5rem;
     padding: 0.7rem 0.7rem 0.7rem 0.875rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
-.summary-row:first-child {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+        "heading"
+        "value";
+    gap: 0.38rem;
     background: var(--surface-soft);
-}
-
-.summary-row + .summary-row {
-    border-top: 1px solid var(--border);
+    border-radius: var(--radius);
 }
 
 .summary-row span {
@@ -280,24 +272,46 @@ button svg {
 }
 
 .summary-row > span:first-child {
-    flex: 0 0 auto;
+    grid-area: heading;
 }
 
 .summary-row strong {
+    display: block;
     color: var(--text);
-    font-size: 1.02rem;
+    font-size: 1.9rem;
+    line-height: 1.05;
     font-weight: 800;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin-left: auto;
-    text-align: right;
+    margin-left: 0;
+    text-align: left;
     transition: transform 0.18s ease, color 0.18s ease;
 }
 
-#summaryTry {
+.summary-value-row {
+    grid-area: value;
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+}
+
+.summary-row .summary-value-prefix {
+    flex: 0 0 auto;
+    color: #ffffff;
     font-size: 1.9rem;
+    font-weight: 800;
     line-height: 1.05;
+}
+
+.summary-try-value {
+    color: #ffffff;
+    transition: transform 0.18s ease;
+}
+
+.summary-try-prefix {
+    margin-right: 0.25rem;
 }
 
 .summary-usd-prefix,
@@ -307,12 +321,6 @@ button svg {
 }
 
 .summary-usd-input-wrapper {
-    min-width: 0;
-    flex: 1 1 auto;
-    display: flex;
-    align-items: baseline;
-    justify-content: flex-end;
-    margin-left: 1rem;
     background: transparent;
     color: #ffffff;
     cursor: text;
@@ -321,7 +329,6 @@ button svg {
 }
 
 .summary-row .summary-usd-prefix {
-    flex: 0 0 auto;
     color: #ffffff;
     font-size: 1.9rem;
     font-weight: 800;
@@ -342,7 +349,7 @@ button svg {
     color: #ffffff;
     font-weight: 800;
     padding: 0;
-    text-align: right;
+    text-align: left;
 }
 
 .summary-row strong.flash {
@@ -396,6 +403,10 @@ button svg {
     font-weight: 800;
 }
 
+.summary-try-value.flash {
+    transform: scale(1.02);
+}
+
 #grossRobuxInput {
     cursor: default;
 }
@@ -406,8 +417,6 @@ button svg {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: 0.75rem;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
 }
 
 .rate-exchange-row {
@@ -448,20 +457,6 @@ button svg {
 
 .inline-rate-input {
     -moz-appearance: textfield;
-}
-
-.refresh-rate-btn {
-    width: 1.6rem;
-    height: 1.6rem;
-}
-
-.refresh-rate-btn.spinning svg {
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
 }
 
 .drawer-overlay {
@@ -604,21 +599,14 @@ button:focus-visible {
         height: 2.8rem;
     }
 
-    .summary-row .summary-usd-prefix,
+    .summary-row .summary-value-prefix,
+    .summary-row strong,
     #summaryUsdInput {
         font-size: 1.55rem;
     }
 
     .summary-row {
         height: 3.25rem;
-    }
-
-    .summary-row strong {
-        font-size: 0.95rem;
-    }
-
-    #summaryTry {
-        font-size: 1.55rem;
     }
 
     .summary-row span {
@@ -638,11 +626,6 @@ button:focus-visible {
         font-size: 0.625rem;
         padding: 0.18rem 0.1rem;
         width: 3rem;
-    }
-
-    .refresh-rate-btn {
-        width: 1.2rem;
-        height: 1.2rem;
     }
 
 }
@@ -686,7 +669,8 @@ button:focus-visible {
         padding-right: 0.75rem;
     }
 
-    .summary-row .summary-usd-prefix,
+    .summary-row .summary-value-prefix,
+    .summary-row strong,
     #summaryUsdInput {
         font-size: 1.35rem;
     }
@@ -696,9 +680,6 @@ button:focus-visible {
         font-size: 1.35rem;
     }
 
-    #summaryTry {
-        font-size: 1.35rem;
-    }
 }
 
 .toast {
