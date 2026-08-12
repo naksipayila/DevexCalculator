@@ -18,6 +18,7 @@
     --danger: #fb7185;
     --radius: 6px;
     --radius-sm: 4px;
+    --value-box-height: 4.5625rem;
 }
 
 body {
@@ -148,7 +149,8 @@ button svg {
     background: var(--surface-soft);
     border: 0;
     border-radius: 0;
-    min-height: 4rem;
+    height: var(--value-box-height);
+    min-height: 0;
     padding: 0.75rem 0.65rem 0.75rem 0.875rem;
 }
 
@@ -251,8 +253,9 @@ button svg {
 
 .summary-row {
     min-width: 0;
-    height: 3.5rem;
-    padding: 0.7rem 0.7rem 0.7rem 0.875rem;
+    height: var(--value-box-height);
+    min-height: 0;
+    padding: 0.75rem 0.65rem 0.75rem 0.875rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
@@ -561,6 +564,10 @@ button:focus-visible {
 }
 
 @media (max-width: 640px) {
+    :root {
+        --value-box-height: 4.1rem;
+    }
+
     body {
         align-items: center;
         padding: 0.625rem;
@@ -584,7 +591,7 @@ button:focus-visible {
     }
 
     .input-wrapper {
-        min-height: 3.25rem;
+        min-height: 0;
         padding: 0.65rem 0.55rem 0.65rem 0.75rem;
     }
 
@@ -606,7 +613,8 @@ button:focus-visible {
     }
 
     .summary-row {
-        height: 3.25rem;
+        min-height: 0;
+        padding: 0.65rem 0.55rem 0.65rem 0.75rem;
     }
 
     .summary-row span {
