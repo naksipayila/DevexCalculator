@@ -9,12 +9,9 @@ const STORAGE_KEYS = {
 let robux = '';
 let usd = '';
 let tryRate = 46.00;
-let prevUsdValue = 0;
-let animFrameId = null;
 
 
 const mainInput = document.getElementById('mainInput');
-const inputWrapper = document.getElementById('inputWrapper');
 const clearBtn = document.getElementById('clearBtn');
 
 const tryRateInput = document.getElementById('tryRateInput');
@@ -102,27 +99,6 @@ const showToast = (message) => {
     setTimeout(() => toast.classList.remove('show'), 2000);
 };
 
-const animateNumber = (el, from, to, formatter, duration = 250) => {
-    if (animFrameId) cancelAnimationFrame(animFrameId);
-    const startTime = performance.now();
-
-    const tick = (now) => {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const current = from + (to - from) * eased;
-        el.value = formatter(current);
-
-        if (progress < 1) {
-            animFrameId = requestAnimationFrame(tick);
-        } else {
-            animFrameId = null;
-        }
-    };
-
-    animFrameId = requestAnimationFrame(tick);
-};
-
 const clear = () => {
     robux = '';
     usd = '';
@@ -152,9 +128,7 @@ const loadSavedState = () => {
 
 const updateSummary = (rawUsd, tryDisplay) => {
     if (document.activeElement !== summaryUsdInput) {
-        const newUsd = rawUsd || 0;
-        animateNumber(summaryUsdInput, prevUsdValue, newUsd, formatUsdInput, 250);
-        prevUsdValue = newUsd;
+        summaryUsdInput.value = formatUsdInput(rawUsd || 0);
     }
     summaryTry.textContent = tryDisplay;
 };
@@ -235,14 +209,6 @@ summaryUsdInput.addEventListener('blur', () => {
 mainInput.addEventListener('input', (e) => {
     updateFromRobux(e.target.value);
     updateUI();
-});
-
-mainInput.addEventListener('focus', () => {
-    inputWrapper.classList.add('focused');
-});
-
-mainInput.addEventListener('blur', () => {
-    inputWrapper.classList.remove('focused');
 });
 
 const handleClear = () => {
