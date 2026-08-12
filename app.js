@@ -16,7 +16,6 @@ let animFrameId = null;
 const mainInput = document.getElementById('mainInput');
 const inputWrapper = document.getElementById('inputWrapper');
 const clearBtn = document.getElementById('clearBtn');
-const quickGrid = document.getElementById('quickGrid');
 
 const tryRateInput = document.getElementById('tryRateInput');
 const refreshRateBtn = document.getElementById('refreshRateBtn');
@@ -207,13 +206,6 @@ const triggerFlash = () => {
     }, 400);
 };
 
-const addAmount = (amount) => {
-    const currentVal = parseRobux(robux);
-    updateFromRobux((currentVal + amount).toString());
-    triggerFlash();
-    updateUI();
-};
-
 const updateUI = () => {
     const rawUsd = parseUsd(usd);
     const tryDisplay = formatCurrencyTRY(rawUsd * tryRate);
@@ -225,37 +217,7 @@ const updateUI = () => {
     if (document.activeElement !== tryRateInput) {
         tryRateInput.value = tryRate.toFixed(2);
     }
-    renderQuickButtons();
     persistState();
-};
-
-const renderQuickButtons = () => {
-    quickGrid.innerHTML = '';
-
-    [1000, 10000, 100000, 200000].forEach((amt) => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'quick-btn-wrapper';
-
-        const btn = document.createElement('button');
-        btn.className = 'quick-btn';
-
-        const label = document.createElement('span');
-        label.textContent = `+${amt >= 1000 ? `${amt / 1000}K` : amt}`;
-        btn.appendChild(label);
-
-        wrapper.appendChild(btn);
-
-        btn.addEventListener('click', () => {
-            addAmount(amt);
-        });
-
-        btn.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            addAmount(amt * 2);
-        });
-
-        quickGrid.appendChild(wrapper);
-    });
 };
 
 summaryUsdInput.addEventListener('input', (e) => {

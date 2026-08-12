@@ -8,7 +8,6 @@ A simple Roblox DevEx calculator for converting Robux to USD and TRY.
 
 - Robux, USD, and TRY conversion
 - Live USD/TRY exchange rate
-- Quick-add buttons
 - Roblox tax calculator
 - Responsive dark interface
 - No dependencies or build step

@@ -246,49 +246,6 @@ button {
     background-color: var(--surface-raised);
 }
 
-.quick-grid {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.quick-btn-wrapper {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    border-radius: var(--radius-sm);
-}
-
-.quick-btn {
-    min-width: 0;
-    width: 100%;
-    min-height: 2.75rem;
-    padding: 0.65rem 0.625rem;
-    background: var(--surface-soft);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    color: var(--text-muted);
-    font-size: 0.78rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    touch-action: none;
-    transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
-}
-
-.quick-btn:hover {
-    background: var(--surface-raised);
-    border-color: rgba(74, 163, 255, 0.46);
-    color: #d9ecff;
-}
-
-.quick-btn:active {
-    transform: scale(0.95);
-}
-
 .summary-panel {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -663,15 +620,6 @@ button:focus-visible {
         height: 2.8rem;
     }
 
-    .quick-grid {
-        gap: 0.4rem;
-    }
-
-    .quick-btn {
-        min-height: 3rem;
-        padding: 0.65rem 0.4rem;
-    }
-
     .summary-panel {
         grid-template-columns: 1fr;
         gap: 0.5rem;
@@ -736,14 +684,6 @@ button:focus-visible {
     .interaction-area {
         padding-left: 0.75rem;
         padding-right: 0.75rem;
-    }
-
-    .quick-grid {
-        gap: 0.325rem;
-    }
-
-    .quick-btn {
-        font-size: 0.75rem;
     }
 
     .summary-row-primary strong,
