@@ -302,7 +302,7 @@ button svg {
 
 .summary-row .summary-value-prefix {
     flex: 0 0 auto;
-    color: #ffffff;
+    color: var(--text-soft);
     font-size: 1.9rem;
     font-weight: 800;
     line-height: 1.05;
@@ -332,7 +332,7 @@ button svg {
 }
 
 .summary-row .summary-usd-prefix {
-    color: #ffffff;
+    color: var(--text-soft);
     font-size: 1.9rem;
     font-weight: 800;
     margin-right: 0.25rem;
