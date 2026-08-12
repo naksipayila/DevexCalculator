@@ -326,7 +326,7 @@ button svg {
 
 .summary-usd-input-wrapper {
     background: transparent;
-    color: #ffffff;
+    color: var(--text);
     cursor: text;
     touch-action: manipulation;
     transition: transform 0.18s ease;
@@ -350,7 +350,7 @@ button svg {
     background: transparent;
     border: none;
     outline: none;
-    color: #ffffff;
+    color: var(--text);
     font-weight: 800;
     padding: 0;
     text-align: left;
