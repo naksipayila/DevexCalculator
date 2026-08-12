@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevEx Calculator</title>
-    <meta name="theme-color" content="#0a1018">
+    <meta name="theme-color" content="#0f1115">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -22,9 +22,7 @@
             <main class="interaction-area">
                 <section>
                     <div class="input-wrapper" id="inputWrapper">
-                        <div class="input-heading">
-                            <label class="input-label">Robux</label>
-                        </div>
+                        <label class="input-label">Robux</label>
 
                         <div class="input-value-row">
                             <div class="input-prefix">
@@ -40,7 +38,7 @@
                 </section>
 
                 <section class="summary-panel" aria-label="Conversion summary">
-                    <article class="summary-row summary-row-primary">
+                    <article class="summary-row">
                         <span>USD</span>
                         <div class="summary-usd-input-wrapper" id="summaryUsdWrapper">
                             <span class="summary-usd-prefix">$</span>
@@ -55,9 +53,7 @@
                 </section>
 
                 <section class="rate-panel" aria-label="Rate information">
-                    <div class="rate-devex-row">
-                        <span class="devex-chip">1 R$ = $0.0038</span>
-                    </div>
+                    <span class="devex-chip">1 R$ = $0.0038</span>
                     <div class="rate-exchange-row">
                         <span>1 USD =</span>
                         <input type="number" step="0.01" id="tryRateInput" class="inline-rate-input" value="46.00">

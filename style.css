@@ -5,24 +5,19 @@
 }
 
 :root {
-    --bg: #0b0d12;
-    --surface: #121720;
-    --surface-soft: #0e1219;
-    --surface-raised: #171d28;
-    --text: #f5f7fb;
-    --text-muted: #b8c3d4;
-    --text-soft: #7f8da3;
-    --border: #273244;
-    --border-strong: #334056;
-    --accent: #3388d8;
-    --accent-soft: rgba(74, 163, 255, 0.12);
-    --success: #35d49a;
-    --warning: #f8c14a;
+    --bg: #0f1115;
+    --surface: #171a20;
+    --surface-soft: #12151a;
+    --surface-raised: #1c2028;
+    --text: #f4f5f7;
+    --text-muted: #a9b0bc;
+    --text-soft: #7d8592;
+    --border: #2a303a;
+    --accent: #66a8e8;
+    --accent-soft: rgba(102, 168, 232, 0.12);
     --danger: #fb7185;
-    --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
-    --ring: 0 0 0 3px rgba(74, 163, 255, 0.18);
-    --radius: 8px;
-    --radius-sm: 5px;
+    --radius: 6px;
+    --radius-sm: 4px;
 }
 
 body {
@@ -58,10 +53,9 @@ button {
 }
 
 .card-container {
-    background: radial-gradient(circle at 20% 0%, #1a2332, var(--surface) 70%);
-    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
     overflow: hidden;
 }
 
@@ -72,21 +66,19 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--surface-soft);
-    border: 1px solid rgba(74, 163, 255, 0.32);
+    background: var(--accent);
+    border: 1px solid var(--accent);
     border-radius: var(--radius);
-    color: #d9ecff;
+    color: #08111d;
     gap: 0.55rem;
     font-size: 0.8rem;
     font-weight: 800;
     cursor: pointer;
-    transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    transition: background-color 0.18s ease, transform 0.18s ease;
 }
 
 .tax-launch-btn:hover {
-    background: var(--surface-raised);
-    border-color: rgba(74, 163, 255, 0.5);
-    color: #ffffff;
+    background: #8bbff0;
 }
 
 .tax-launch-btn:active {
@@ -94,28 +86,17 @@ button {
 }
 
 .devex-chip {
-    display: inline-flex;
-    align-items: center;
-    min-height: 1.7rem;
-    color: var(--text);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 0.23rem 0.5rem;
+    color: var(--text-muted);
     font-size: 0.72rem;
-    font-weight: 800;
+    font-weight: 700;
     white-space: nowrap;
 }
 
 .interaction-area {
-    padding: 1.35rem;
+    padding: 1.1rem;
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-}
-
-.input-heading {
-    grid-area: heading;
 }
 
 .input-label,
@@ -126,6 +107,7 @@ button {
 }
 
 .input-label {
+    grid-area: heading;
     color: var(--text-soft);
     font-size: 0.6rem;
     letter-spacing: 0.08em;
@@ -138,7 +120,7 @@ button {
     background: var(--surface-soft);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+    transition: border-color 0.18s ease, background-color 0.18s ease;
 }
 
 .input-wrapper {
@@ -160,7 +142,6 @@ button {
 .tax-input-wrapper:focus-within {
     background: var(--surface-raised);
     border-color: var(--accent);
-    box-shadow: var(--ring);
 }
 
 .input-prefix {
@@ -247,13 +228,12 @@ button {
 }
 
 .summary-panel {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.625rem;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
 }
 
-.summary-row,
-.rate-panel,
 .tax-info-box {
     background: var(--surface-soft);
     border: 1px solid var(--border);
@@ -262,15 +242,16 @@ button {
 
 .summary-row {
     min-width: 0;
-    padding: 0.75rem;
+    padding: 0.7rem 0;
     display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
-.summary-row-primary {
-    min-height: 4.75rem;
-    background: #0a1018;
+.summary-row + .summary-row {
+    border-top: 1px solid var(--border);
 }
 
 .summary-row span {
@@ -296,30 +277,10 @@ button {
     line-height: 1.05;
 }
 
-.summary-row-primary span {
-    color: #9fb2c8;
-}
-
-.summary-row-primary strong {
-    color: #ffffff;
-}
-
-.summary-row-primary strong,
 .summary-usd-prefix,
 #summaryUsdInput {
     font-size: 1.9rem;
     line-height: 1.05;
-}
-
-.summary-row-primary:focus-within {
-    border-color: var(--accent);
-    box-shadow: var(--ring);
-}
-
-.summary-row-primary.flash {
-    box-shadow: inset 0 1px 0 rgba(74, 163, 255, 0.15), 0 0 35px rgba(74, 163, 255, 0.2);
-    border-color: rgba(74, 163, 255, 0.55);
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .summary-usd-input-wrapper {
@@ -356,7 +317,6 @@ button {
     color: var(--accent);
 }
 
-.summary-row-primary strong.flash,
 .summary-usd-input-wrapper.flash {
     transform: scale(1.02);
     color: #ffffff;
@@ -404,18 +364,14 @@ button {
 }
 
 .rate-panel {
-    padding: 0.6rem 0.75rem;
+    padding: 0.6rem 0;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-}
-
-.rate-devex-row {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
 }
 
 .rate-exchange-row {
@@ -440,12 +396,11 @@ button {
     text-align: center;
     padding: 0.23rem 0.125rem;
     outline: none;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    transition: border-color 0.18s ease;
 }
 
 .inline-rate-input:focus {
     border-color: var(--accent);
-    box-shadow: var(--ring);
 }
 
 .inline-rate-input::-webkit-outer-spin-button,
@@ -480,7 +435,6 @@ button {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
-    backdrop-filter: blur(6px);
 }
 
 .drawer-overlay.open {
@@ -499,20 +453,18 @@ button {
     max-width: 24rem;
     max-height: calc(100vh - 2rem);
     overflow-y: auto;
-    background: rgba(18, 23, 32, 0.94);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: var(--surface);
     border-radius: var(--radius);
-    border: 1px solid var(--border-strong);
+    border: 1px solid var(--border);
     padding: 1.25rem;
     transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: var(--shadow);
     z-index: 100;
 }
 
 button:focus-visible {
     outline: none;
-    box-shadow: var(--ring);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 .drawer-overlay.open .drawer-content {
@@ -555,7 +507,7 @@ button:focus-visible {
 }
 
 .tax-info-box {
-    padding: 1rem;
+    padding: 0.85rem;
     margin-top: 0.5rem;
 }
 
@@ -582,13 +534,6 @@ button:focus-visible {
 
     .app-container {
         max-width: 22rem;
-    }
-
-    .devex-chip {
-        max-width: 100%;
-        min-height: 1.4rem;
-        font-size: 0.58rem;
-        padding: 0.15rem 0.32rem;
     }
 
     .interaction-area {
@@ -620,20 +565,6 @@ button:focus-visible {
         height: 2.8rem;
     }
 
-    .summary-panel {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-    }
-
-    .summary-row {
-        justify-content: center;
-    }
-
-    .summary-row-primary {
-        min-height: 3.8rem;
-    }
-
-    .summary-row-primary strong,
     .summary-row .summary-usd-prefix,
     #summaryUsdInput {
         font-size: 1.55rem;
@@ -653,7 +584,6 @@ button:focus-visible {
 
     .rate-panel {
         gap: 0.35rem;
-        padding: 0.5rem 0.55rem;
     }
 
     .rate-exchange-row {
@@ -686,7 +616,6 @@ button:focus-visible {
         padding-right: 0.75rem;
     }
 
-    .summary-row-primary strong,
     .summary-row .summary-usd-prefix,
     #summaryUsdInput {
         font-size: 1.35rem;
@@ -708,7 +637,7 @@ button:focus-visible {
     left: 50%;
     transform: translateX(-50%) translateY(1rem);
     background: var(--surface-raised);
-    border: 1px solid var(--border-strong);
+    border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 0.625rem 1.125rem;
     color: var(--text-muted);

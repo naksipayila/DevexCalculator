@@ -195,12 +195,11 @@ const fetchExchangeRate = async () => {
 };
 
 const triggerFlash = () => {
-    const primaryRow = document.querySelector('.summary-row-primary');
-    [summaryUsdWrapper, summaryTry, primaryRow].forEach((el) => {
+    [summaryUsdWrapper, summaryTry].forEach((el) => {
         if (el) el.classList.add('flash');
     });
     setTimeout(() => {
-        [summaryUsdWrapper, summaryTry, primaryRow].forEach((el) => {
+        [summaryUsdWrapper, summaryTry].forEach((el) => {
             if (el) el.classList.remove('flash');
         });
     }, 400);
