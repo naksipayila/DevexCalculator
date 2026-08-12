@@ -275,15 +275,6 @@ const calculateFromNet = (netVal) => {
     taxAmountDisplay.textContent = `${formatNumber(tax)} R$`;
 };
 
-const calculateFromGross = (grossVal) => {
-    const gross = Math.min(parseFloat(grossVal) || 0, TAX_MAX_ROBUX);
-    const net = Math.floor(gross * (1 - TAX_RATE));
-    const tax = gross - net;
-
-    netRobuxInput.value = formatNumber(net);
-    taxAmountDisplay.textContent = `${formatNumber(tax)} R$`;
-};
-
 const normalizeTaxInput = (value) => {
     const clean = value.toString().replace(/[^0-9]/g, '');
     return Math.min(parseInt(clean, 10) || 0, TAX_MAX_ROBUX);
@@ -296,18 +287,11 @@ const allowTaxInputKey = (e) => {
 };
 
 netRobuxInput.addEventListener('keydown', allowTaxInputKey);
-grossRobuxInput.addEventListener('keydown', allowTaxInputKey);
 
 netRobuxInput.addEventListener('input', (e) => {
     const value = normalizeTaxInput(e.target.value);
     e.target.value = formatNumber(value);
     calculateFromNet(value);
-});
-
-grossRobuxInput.addEventListener('input', (e) => {
-    const value = normalizeTaxInput(e.target.value);
-    e.target.value = formatNumber(value);
-    calculateFromGross(value);
 });
 
 document.getElementById('grossCopyBtn').addEventListener('click', () => {

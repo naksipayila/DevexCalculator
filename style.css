@@ -305,10 +305,11 @@ button svg {
 
 .summary-usd-input-wrapper {
     min-width: 0;
-    flex: 0 0 auto;
+    flex: 1 1 auto;
     display: flex;
     align-items: baseline;
     justify-content: flex-end;
+    margin-left: 1rem;
     background: var(--surface-soft);
     color: #ffffff;
     cursor: text;
@@ -390,6 +391,10 @@ button svg {
     outline: none;
     color: var(--text);
     font-weight: 800;
+}
+
+#grossRobuxInput {
+    cursor: default;
 }
 
 .rate-panel {
