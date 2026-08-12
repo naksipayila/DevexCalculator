@@ -1,7 +1,6 @@
 const DEVEX_RATE = 0.0038;
 const TAX_RATE = 0.30;
 const STORAGE_KEYS = {
-    robux: 'devexRobux',
     tryRate: 'tryRate',
     tryRateTimestamp: 'tryRateTimestamp'
 };
@@ -88,10 +87,6 @@ const formatCurrencyTRY = (val) => {
     return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(val);
 };
 
-const persistState = () => {
-    setStoredItem(STORAGE_KEYS.robux, robux);
-};
-
 const showToast = (message) => {
     const toast = document.getElementById('toast');
     toast.textContent = message;
@@ -117,14 +112,6 @@ function updateFromUsd(valStr) {
     usd = rawUsd ? rawUsd.toFixed(2) : '';
     robux = rawUsd ? Math.floor(rawUsd / DEVEX_RATE).toString() : '';
 }
-
-const loadSavedState = () => {
-    const savedRobux = getStoredItem(STORAGE_KEYS.robux);
-
-    if (savedRobux) {
-        updateFromRobux(savedRobux);
-    }
-};
 
 const updateSummary = (rawUsd, tryDisplay) => {
     if (document.activeElement !== summaryUsdInput) {
@@ -190,7 +177,6 @@ const updateUI = () => {
     if (document.activeElement !== tryRateInput) {
         tryRateInput.value = tryRate.toFixed(2);
     }
-    persistState();
 };
 
 summaryUsdInput.addEventListener('input', (e) => {
@@ -325,7 +311,6 @@ summaryUsdWrapper.addEventListener('click', (e) => {
     }
 });
 
-loadSavedState();
 updateUI();
 fetchExchangeRate();
 setInterval(fetchExchangeRate, 24 * 60 * 60 * 1000);

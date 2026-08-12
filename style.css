@@ -99,6 +99,12 @@ button {
     gap: 0.8rem;
 }
 
+.interaction-area > section,
+.interaction-area > .rate-panel,
+.interaction-area > .tax-launch-btn {
+    width: 100%;
+}
+
 .input-label,
 .tax-label {
     color: var(--text-muted);
@@ -126,6 +132,7 @@ button {
 .input-wrapper {
     position: relative;
     display: grid;
+    width: 100%;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
         "heading clear"
@@ -241,6 +248,7 @@ button {
 
 .summary-row {
     min-width: 0;
+    min-height: 3.25rem;
     padding: 0.7rem 0;
     display: flex;
     flex-direction: row;
@@ -261,6 +269,10 @@ button {
     text-transform: uppercase;
 }
 
+.summary-row > span:first-child {
+    flex: 0 0 auto;
+}
+
 .summary-row strong {
     color: var(--text);
     font-size: 1.02rem;
@@ -268,6 +280,8 @@ button {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-left: auto;
+    text-align: right;
     transition: transform 0.18s ease, color 0.18s ease;
 }
 
@@ -284,8 +298,10 @@ button {
 
 .summary-usd-input-wrapper {
     min-width: 0;
+    flex: 1 1 auto;
     display: flex;
     align-items: baseline;
+    justify-content: flex-end;
     color: #ffffff;
     transition: transform 0.18s ease;
 }
@@ -301,7 +317,8 @@ button {
 }
 
 #summaryUsdInput {
-    width: 100%;
+    flex: 1 1 auto;
+    width: auto;
     min-width: 0;
     background: transparent;
     border: none;
@@ -309,6 +326,7 @@ button {
     color: #ffffff;
     font-weight: 800;
     padding: 0;
+    text-align: right;
 }
 
 .summary-row strong.flash {
@@ -364,10 +382,9 @@ button {
 
 .rate-panel {
     padding: 0.6rem 0;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
     gap: 0.75rem;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
@@ -381,7 +398,8 @@ button {
     font-size: 0.68rem;
     font-weight: 700;
     white-space: nowrap;
-    margin-left: auto;
+    margin-left: 0;
+    justify-self: end;
 }
 
 .inline-rate-input {
@@ -586,8 +604,6 @@ button:focus-visible {
     }
 
     .rate-exchange-row {
-        flex: 0 0 auto;
-        margin-left: auto;
         gap: 0.25rem;
         font-size: 0.58rem;
     }
