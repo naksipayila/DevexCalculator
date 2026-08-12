@@ -149,6 +149,7 @@ button svg {
     background: var(--surface-soft);
     border: 0;
     border-radius: var(--radius);
+    overflow: hidden;
     height: var(--value-box-height);
     min-height: 0;
     padding: 0.75rem 0.65rem 0.75rem 0.875rem;
