@@ -211,6 +211,10 @@ mainInput.addEventListener('input', (e) => {
     updateUI();
 });
 
+mainInput.addEventListener('click', () => {
+    mainInput.value = '';
+});
+
 const handleClear = () => {
     mainInput.blur();
     summaryUsdInput.blur();
