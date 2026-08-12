@@ -122,10 +122,13 @@ button {
 .input-wrapper,
 .tax-input-wrapper {
     align-items: center;
+    transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.tax-input-wrapper {
     background: var(--surface-soft);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    transition: border-color 0.18s ease, background-color 0.18s ease;
 }
 
 .input-wrapper {
@@ -136,6 +139,9 @@ button {
         "heading clear"
         "value clear";
     gap: 0.38rem;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
     min-height: 4rem;
     padding: 0.75rem 0.65rem 0.75rem 0.875rem;
 }
@@ -243,8 +249,8 @@ button {
 
 .summary-row {
     min-width: 0;
-    min-height: 3.25rem;
-    padding: 0.7rem 0;
+    height: 3.5rem;
+    padding: 0.7rem 0.7rem 0.7rem 0.875rem;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -306,7 +312,7 @@ button {
     color: #ffffff;
     font-size: 1.9rem;
     font-weight: 800;
-    margin-left: 0.25rem;
+    margin-right: 0.25rem;
     letter-spacing: 0;
     line-height: 1.05;
     text-transform: none;
@@ -314,7 +320,7 @@ button {
 
 #summaryUsdInput {
     flex: 0 0 auto;
-    width: 7ch;
+    width: auto;
     min-width: 0;
     field-sizing: content;
     background: transparent;
@@ -378,7 +384,7 @@ button {
 }
 
 .rate-panel {
-    padding: 0.6rem 0;
+    padding: 0.6rem 0.7rem 0.6rem 0.875rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
@@ -491,12 +497,15 @@ button:focus-visible {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 0.75rem;
     margin-bottom: 1rem;
 }
 
 .drawer-title {
+    min-width: 0;
     font-size: 1.125rem;
     font-weight: 800;
+    line-height: 1.2;
     color: var(--text);
 }
 
@@ -583,6 +592,10 @@ button:focus-visible {
         font-size: 1.55rem;
     }
 
+    .summary-row {
+        height: 3.25rem;
+    }
+
     .summary-row strong {
         font-size: 0.95rem;
     }
@@ -615,6 +628,35 @@ button:focus-visible {
         height: 1.2rem;
     }
 
+}
+
+@media (max-width: 340px) {
+    .rate-panel {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+        padding-block: 0.55rem;
+    }
+
+    .rate-exchange-row {
+        justify-self: end;
+    }
+
+    .drawer-content {
+        padding: 1rem;
+    }
+
+    .drawer-header {
+        gap: 0.5rem;
+        margin-bottom: 0.85rem;
+    }
+
+    .drawer-title {
+        font-size: 1rem;
+    }
+
+    .tax-input-group {
+        margin-bottom: 0.85rem;
+    }
 }
 
 @media (max-width: 380px) {
