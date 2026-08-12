@@ -1,5 +1,6 @@
 const DEVEX_RATE = 0.0038;
 const TAX_RATE = 0.30;
+const TAX_MAX_ROBUX = 1_000_000_000;
 const STORAGE_KEYS = {
     tryRate: 'tryRate',
     tryRateTimestamp: 'tryRateTimestamp'
@@ -266,7 +267,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 const calculateFromNet = (netVal) => {
-    const net = parseFloat(netVal) || 0;
+    const net = Math.min(parseFloat(netVal) || 0, TAX_MAX_ROBUX);
     const gross = Math.floor(net / (1 - TAX_RATE));
     const tax = gross - net;
 
@@ -275,7 +276,7 @@ const calculateFromNet = (netVal) => {
 };
 
 const calculateFromGross = (grossVal) => {
-    const gross = parseFloat(grossVal) || 0;
+    const gross = Math.min(parseFloat(grossVal) || 0, TAX_MAX_ROBUX);
     const net = Math.floor(gross * (1 - TAX_RATE));
     const tax = gross - net;
 
@@ -283,16 +284,30 @@ const calculateFromGross = (grossVal) => {
     taxAmountDisplay.textContent = `${formatNumber(tax)} R$`;
 };
 
+const normalizeTaxInput = (value) => {
+    const clean = value.toString().replace(/[^0-9]/g, '');
+    return Math.min(parseInt(clean, 10) || 0, TAX_MAX_ROBUX);
+};
+
+const allowTaxInputKey = (e) => {
+    const controlKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'Tab', 'Enter'];
+    if (e.ctrlKey || e.metaKey || e.altKey || controlKeys.includes(e.key)) return;
+    if (!/^\d$/.test(e.key)) e.preventDefault();
+};
+
+netRobuxInput.addEventListener('keydown', allowTaxInputKey);
+grossRobuxInput.addEventListener('keydown', allowTaxInputKey);
+
 netRobuxInput.addEventListener('input', (e) => {
-    const clean = e.target.value.replace(/[^0-9]/g, '');
-    e.target.value = formatNumber(clean);
-    calculateFromNet(clean);
+    const value = normalizeTaxInput(e.target.value);
+    e.target.value = formatNumber(value);
+    calculateFromNet(value);
 });
 
 grossRobuxInput.addEventListener('input', (e) => {
-    const clean = e.target.value.replace(/[^0-9]/g, '');
-    e.target.value = formatNumber(clean);
-    calculateFromGross(clean);
+    const value = normalizeTaxInput(e.target.value);
+    e.target.value = formatNumber(value);
+    calculateFromGross(value);
 });
 
 document.getElementById('grossCopyBtn').addEventListener('click', () => {
@@ -304,8 +319,9 @@ document.getElementById('grossCopyBtn').addEventListener('click', () => {
     }
 });
 
-summaryUsdWrapper.addEventListener('click', (e) => {
+summaryUsdWrapper.addEventListener('pointerdown', (e) => {
     if (e.target !== summaryUsdInput) {
+        e.preventDefault();
         summaryUsdInput.focus();
         summaryUsdInput.select();
     }

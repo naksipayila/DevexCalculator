@@ -40,10 +40,10 @@
                 <section class="summary-panel" aria-label="Conversion summary">
                     <article class="summary-row">
                         <span>USD</span>
-                        <div class="summary-usd-input-wrapper" id="summaryUsdWrapper">
+                        <label class="summary-usd-input-wrapper" id="summaryUsdWrapper">
                             <span class="summary-usd-prefix">$</span>
                             <input type="text" id="summaryUsdInput" value="0.00" autocomplete="off" inputmode="decimal" aria-label="USD Amount" />
-                        </div>
+                        </label>
                     </article>
 
                     <article class="summary-row">
@@ -86,7 +86,7 @@
                 <label class="tax-label">Net Robux (Amount Received)</label>
                 <div class="tax-input-wrapper">
                     <span class="tax-prefix">R$</span>
-                    <input type="text" id="netRobuxInput" placeholder="0">
+                    <input type="text" id="netRobuxInput" placeholder="0" inputmode="numeric" pattern="[0-9.]*" maxlength="13" autocomplete="off" aria-label="Net Robux">
                 </div>
             </div>
 
@@ -94,7 +94,7 @@
                 <label class="tax-label">Gross Robux (Sale Price / Gamepass Price)</label>
                 <div class="tax-input-wrapper">
                     <span class="tax-prefix">R$</span>
-                    <input type="text" id="grossRobuxInput" placeholder="0">
+                    <input type="text" id="grossRobuxInput" placeholder="0" inputmode="numeric" pattern="[0-9.]*" maxlength="13" autocomplete="off" aria-label="Gross Robux">
                     <button class="tax-copy-btn" id="grossCopyBtn" title="Copy" aria-label="Copy Gross Robux">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                     </button>
