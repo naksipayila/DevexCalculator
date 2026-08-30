@@ -118,15 +118,10 @@ const parseUsd = (value) => {
     return Number.parseFloat(decimalSafe) || 0;
 };
 
-const formatUsdInput = (value) => value.toLocaleString('en-US', {
+const formatAmount = (value) => value.toLocaleString('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
 });
-
-const formatTryAmount = (value) => new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-}).format(value);
 
 const sanitizeUsdText = (value) => {
     const cleaned = value.replace(/[^0-9.,]/g, '');
@@ -213,7 +208,7 @@ const queueAnnouncement = (rawUsd, tryDisplay) => {
         return;
     }
 
-    const message = `Robux ${formatNumber(robux)}. USD ${formatUsdInput(rawUsd)}. TRY ${tryDisplay}.`;
+    const message = `Robux ${formatNumber(robux)}. USD ${formatAmount(rawUsd)}. TRY ${tryDisplay}.`;
     announceTimer = setTimeout(() => {
         liveAnnounce.textContent = '';
         requestAnimationFrame(() => {
@@ -259,7 +254,7 @@ function setFromUsd(value) {
 }
 
 const renderHeroValue = () => {
-    heroInput.value = entryMode === 'robux' ? formatNumber(robux) : (usd ? formatUsdInput(parseUsd(usd)) : '');
+    heroInput.value = entryMode === 'robux' ? formatNumber(robux) : (usd ? formatAmount(parseUsd(usd)) : '');
 };
 
 const applyEntryMode = (mode) => {
@@ -350,14 +345,9 @@ const persistTaxCalculator = () => {
     }
 };
 
-const setTaxNetRobux = (value, { keepCaret = false } = {}) => {
+const setTaxNetRobux = (value) => {
     const net = calculateTaxNet(value);
-
-    if (keepCaret) {
-        setFormattedValueKeepingCaret(netRobuxInput, net ? formatNumber(net) : '');
-    } else {
-        netRobuxInput.value = net ? formatNumber(net) : '';
-    }
+    netRobuxInput.value = net ? formatNumber(net) : '';
 
     refreshTaxDisplays();
     persistTaxCalculator();
@@ -430,7 +420,7 @@ const renderRateStatus = () => {
 
 const updateUI = ({ announce = true } = {}) => {
     const rawUsd = parseUsd(usd);
-    const tryDisplay = formatTryAmount(rawUsd * tryRate);
+    const tryDisplay = formatAmount(rawUsd * tryRate);
 
     if (document.activeElement !== heroInput) {
         renderHeroValue();
@@ -445,7 +435,7 @@ const updateUI = ({ announce = true } = {}) => {
         resultRobux.classList.toggle('is-zero', !robuxValue);
     }
 
-    resultUsd.textContent = `$${formatUsdInput(rawUsd)}`;
+    resultUsd.textContent = `$${formatAmount(rawUsd)}`;
     resultUsd.classList.toggle('is-zero', !rawUsd);
     resultTry.textContent = `₺${tryDisplay}`;
     resultTry.classList.toggle('is-zero', !rawUsd);

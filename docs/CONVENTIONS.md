@@ -4,9 +4,9 @@
 
 - Constants first as `UPPER_SNAKE_CASE`, then mutable state as `let`, then DOM refs via `getElementById`, then helpers, then event handlers, then the bottom-of-file init calls.
 - Arrow-function `const` for pure helpers; `function` declarations only for state mutators (`setFromRobux`, `setFromUsd`).
-- camelCase everywhere else; option objects with defaults for behavior flags (`{ keepCaret = false }`).
+- camelCase everywhere else; option objects with defaults for behavior flags (`{ focusNet = false }`).
 - Silent `catch` blocks carry a short English comment explaining why the error is swallowed.
-- Amounts flow as digit-only strings in state; parsing (`parseRobux`, `parseUsd`) and formatting (`formatNumber`, `formatUsdInput`) are separate steps; all display formatting is `en-US`.
+- State holds `robux` as a digit-only string and `usd` as a fixed 2-decimal string; parsing (`parseRobux`, `parseUsd`) and formatting (`formatNumber`, `formatAmount`) are separate steps; all display formatting is `en-US`.
 - Editable inputs preserve the caret via `setFormattedValueKeepingCaret`; re-render skips the focused input.
 - A11y pattern: `aria-pressed` toggles, `aria-expanded` panels, debounced `aria-live` announcements through `queueAnnouncement`.
 
@@ -19,4 +19,4 @@
 
 ## Asset versioning
 
-- Cache busting via `?v=N` on `app.js`/`style.css` refs in `index.html`; bump the changed asset's version and `sw.js` `CACHE_NAME` together (they currently differ per asset: css v53, js v55).
+- Cache busting via `?v=N` on `app.js`/`style.css` refs in `index.html`; bump the changed asset's version and `sw.js` `CACHE_NAME`/pre-cache entry together (they currently differ per asset: css v53, js v56).

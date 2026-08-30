@@ -1,9 +1,9 @@
-const CACHE_NAME = 'devex-calculator-v55';
+const CACHE_NAME = 'devex-calculator-v56';
 const APP_SHELL = [
     './',
     './index.html',
     './style.css?v=53',
-    './app.js?v=55',
+    './app.js?v=56',
     './manifest.webmanifest',
     './favicon.png',
     './icon-192.png',
