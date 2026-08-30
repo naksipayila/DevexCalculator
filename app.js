@@ -3,19 +3,29 @@ const DEVEX_MIN_ROBUX = 30_000;
 const TAX_RATE = 0.30;
 const TAX_MAX_ROBUX = 1_000_000_000;
 const MAX_MAIN_ROBUX_DIGITS = 15;
-const DESKTOP_QUERY = window.matchMedia('(min-width: 901px)');
+const DEFAULT_TRY_RATE = 46.00;
+const RATE_STALE_MS = 6 * 60 * 60 * 1000;
 const STORAGE_KEYS = {
-    tryRate: 'tryRate',
-    tryRateTimestamp: 'tryRateTimestamp',
+    marketTryRate: 'tryRate',
+    marketTryRateTimestamp: 'tryRateTimestamp',
+    manualTryRate: 'tryRateManual',
+    calculatorRobux: 'calculatorRobux',
+    calculatorUsd: 'calculatorUsd',
+    calculatorInputSource: 'calculatorInputSource',
+    taxNetRobux: 'taxNetRobux',
+    taxPanelOpen: 'taxPanelOpen',
     theme: 'theme'
 };
 
 let robux = '';
 let usd = '';
-let tryRate = 46.00;
+let entryMode = 'robux';
+let tryRate = DEFAULT_TRY_RATE;
+let marketTryRate = DEFAULT_TRY_RATE;
+let marketRateSource = 'default';
+let manualTryRate = null;
 let rateSource = 'default';
 let rateUpdatedAt = null;
-let lastDrawerTrigger = null;
 let toastTimer = null;
 let announceTimer = null;
 let isRateRequestInFlight = false;
@@ -23,28 +33,35 @@ let isRateRequestInFlight = false;
 const root = document.documentElement;
 const metaThemeColor = document.getElementById('metaThemeColor');
 const themeToggle = document.getElementById('themeToggle');
-const mainInput = document.getElementById('mainInput');
+const modeRobuxBtn = document.getElementById('modeRobuxBtn');
+const modeUsdBtn = document.getElementById('modeUsdBtn');
+const heroInput = document.getElementById('heroInput');
+const heroPrefix = document.getElementById('heroPrefix');
 const clearBtn = document.getElementById('clearBtn');
 const thresholdHint = document.getElementById('thresholdHint');
+const robuxRow = document.getElementById('robuxRow');
+const resultRobux = document.getElementById('resultRobux');
+const robuxCopyBtn = document.getElementById('robuxCopyBtn');
+const usdRow = document.getElementById('usdRow');
+const resultUsd = document.getElementById('resultUsd');
+const resultTry = document.getElementById('resultTry');
+const usdCopyBtn = document.getElementById('usdCopyBtn');
+const tryCopyBtn = document.getElementById('tryCopyBtn');
+const taxToggleBtn = document.getElementById('taxToggleBtn');
+const taxPanel = document.getElementById('taxPanel');
+const grossSummaryValue = document.getElementById('grossSummaryValue');
+const netRobuxInput = document.getElementById('netRobuxInput');
+const feeDisplay = document.getElementById('feeDisplay');
+const grossDisplay = document.getElementById('grossDisplay');
+const grossCopyBtn = document.getElementById('grossCopyBtn');
+const useMainRobuxBtn = document.getElementById('useMainRobuxBtn');
+const clearTaxBtn = document.getElementById('clearTaxBtn');
 const devexChip = document.getElementById('devexChip');
 const tryRateInput = document.getElementById('tryRateInput');
 const refreshRateBtn = document.getElementById('refreshRateBtn');
+const resetRateBtn = document.getElementById('resetRateBtn');
 const rateDot = document.getElementById('rateDot');
 const rateStatusText = document.getElementById('rateStatusText');
-const summaryUsdWrapper = document.getElementById('summaryUsdWrapper');
-const summaryUsdInput = document.getElementById('summaryUsdInput');
-const usdCopyBtn = document.getElementById('usdCopyBtn');
-const summaryTry = document.getElementById('summaryTry');
-const summaryTryWrapper = document.getElementById('summaryTryWrapper');
-const tryCopyBtn = document.getElementById('tryCopyBtn');
-const taxDrawer = document.getElementById('taxDrawer');
-const taxContent = document.getElementById('taxContent');
-const openTaxBtn = document.getElementById('openTaxBtn');
-const closeTaxBtn = document.getElementById('closeTaxBtn');
-const netRobuxInput = document.getElementById('netRobuxInput');
-const grossRobuxInput = document.getElementById('grossRobuxInput');
-const grossCopyBtn = document.getElementById('grossCopyBtn');
-const taxAmountDisplay = document.getElementById('taxAmountDisplay');
 const toast = document.getElementById('toast');
 const liveAnnounce = document.getElementById('liveAnnounce');
 
@@ -64,13 +81,21 @@ const setStoredItem = (key, value) => {
     }
 };
 
+const removeStoredItem = (key) => {
+    try {
+        localStorage.removeItem(key);
+    } catch (error) {
+        // Storage can be unavailable in some embedded browser contexts.
+    }
+};
+
 const formatNumber = (value) => {
     if (value === '' || value === null || value === undefined) return '';
 
     const digits = value.toString().replace(/\D/g, '');
     if (!digits) return '';
 
-    return Number(digits).toLocaleString('tr-TR');
+    return Number(digits).toLocaleString('en-US');
 };
 
 const parseRobux = (value) => {
@@ -98,24 +123,48 @@ const formatUsdInput = (value) => value.toLocaleString('en-US', {
     maximumFractionDigits: 2
 });
 
-const formatTryAmount = (value) => new Intl.NumberFormat('tr-TR', {
+const formatTryAmount = (value) => new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
 }).format(value);
 
+const sanitizeUsdText = (value) => {
+    const cleaned = value.replace(/[^0-9.,]/g, '');
+    const separatorIndex = cleaned.search(/[.,]/);
+    if (separatorIndex === -1) return cleaned;
+
+    const intPart = cleaned.slice(0, separatorIndex);
+    const decPart = cleaned.slice(separatorIndex + 1).replace(/[.,]/g, '').slice(0, 2);
+
+    return `${intPart}.${decPart}`;
+};
+
 const getTimeLabel = (timestamp) => {
     if (!timestamp) return null;
 
-    return new Intl.DateTimeFormat('tr-TR', {
+    return new Intl.DateTimeFormat('en-GB', {
         hour: '2-digit',
         minute: '2-digit'
     }).format(new Date(timestamp));
 };
 
-const syncUsdInputSize = () => {
-    const size = Math.max(4, Math.min(summaryUsdInput.value.length || 5, 18));
-    summaryUsdInput.size = size;
+const hasManualTryRate = () => Number.isFinite(manualTryRate) && manualTryRate > 0;
+
+const syncEffectiveRate = () => {
+    if (hasManualTryRate()) {
+        tryRate = manualTryRate;
+        rateSource = 'manual';
+        return;
+    }
+
+    tryRate = marketTryRate;
+    rateSource = marketRateSource;
 };
+
+const isMarketRateStale = () => (
+    ['live', 'cache'].includes(marketRateSource)
+    && (!rateUpdatedAt || Date.now() - rateUpdatedAt > RATE_STALE_MS)
+);
 
 const setFormattedValueKeepingCaret = (input, formattedValue) => {
     if (input.value === formattedValue) return;
@@ -191,36 +240,71 @@ const initializeTheme = () => {
     applyTheme(theme);
 };
 
-const clear = () => {
+const clearAmounts = () => {
     robux = '';
     usd = '';
 };
 
-function updateFromRobux(value) {
+function setFromRobux(value) {
+    entryMode = 'robux';
     robux = value.toString().replace(/\D/g, '').slice(0, MAX_MAIN_ROBUX_DIGITS);
     usd = robux ? (parseRobux(robux) * DEVEX_RATE).toFixed(2) : '';
 }
 
-function updateFromUsd(value) {
-    if (!value || !value.toString().trim()) {
-        clear();
+function setFromUsd(value) {
+    entryMode = 'usd';
+    const rawUsd = parseUsd(value);
+    usd = value && value.toString().trim() && rawUsd ? rawUsd.toFixed(2) : '';
+    robux = usd ? String(Math.round(rawUsd / DEVEX_RATE)) : '';
+}
+
+const renderHeroValue = () => {
+    heroInput.value = entryMode === 'robux' ? formatNumber(robux) : (usd ? formatUsdInput(parseUsd(usd)) : '');
+};
+
+const applyEntryMode = (mode) => {
+    entryMode = mode;
+    const isRobux = mode === 'robux';
+
+    modeRobuxBtn.classList.toggle('is-active', isRobux);
+    modeUsdBtn.classList.toggle('is-active', !isRobux);
+    modeRobuxBtn.setAttribute('aria-pressed', String(isRobux));
+    modeUsdBtn.setAttribute('aria-pressed', String(!isRobux));
+
+    heroPrefix.textContent = isRobux ? 'R$' : '$';
+    heroInput.setAttribute('inputmode', isRobux ? 'numeric' : 'decimal');
+    heroInput.setAttribute('aria-label', isRobux ? 'Robux amount' : 'USD amount');
+
+    if (document.activeElement !== heroInput) {
+        renderHeroValue();
+    }
+};
+
+const persistCalculatorState = () => {
+    if (!robux && !usd) {
+        removeStoredItem(STORAGE_KEYS.calculatorRobux);
+        removeStoredItem(STORAGE_KEYS.calculatorUsd);
+        removeStoredItem(STORAGE_KEYS.calculatorInputSource);
         return;
     }
 
-    const rawUsd = parseUsd(value);
-    usd = rawUsd ? rawUsd.toFixed(2) : '';
-    robux = rawUsd ? Math.floor(rawUsd / DEVEX_RATE).toString() : '';
-}
+    setStoredItem(STORAGE_KEYS.calculatorRobux, robux);
+    setStoredItem(STORAGE_KEYS.calculatorUsd, usd);
+    setStoredItem(STORAGE_KEYS.calculatorInputSource, entryMode);
+};
 
-const updateSummary = (rawUsd, tryDisplay) => {
-    if (document.activeElement !== summaryUsdInput) {
-        summaryUsdInput.value = formatUsdInput(rawUsd);
+const restoreCalculatorState = () => {
+    const storedSource = getStoredItem(STORAGE_KEYS.calculatorInputSource);
+    const storedRobux = getStoredItem(STORAGE_KEYS.calculatorRobux);
+    const storedUsd = getStoredItem(STORAGE_KEYS.calculatorUsd);
+
+    if (storedSource === 'usd' && storedUsd) {
+        setFromUsd(storedUsd);
+    } else if (storedRobux) {
+        setFromRobux(storedRobux);
+    } else {
+        entryMode = 'robux';
     }
-
-    syncUsdInputSize();
-    summaryUsdWrapper.classList.toggle('is-zero', !rawUsd);
-    summaryTryWrapper.classList.toggle('is-zero', !rawUsd);
-    summaryTry.textContent = tryDisplay;
 };
 
 const updateThresholdHint = () => {
@@ -233,24 +317,112 @@ const updateThresholdHint = () => {
     }
 };
 
+const calculateTaxNet = (value) => Math.min(parseRobux(value), TAX_MAX_ROBUX);
+
+const calculateGross = (net) => (net > 0 ? Math.ceil(net / (1 - TAX_RATE)) : 0);
+
+const refreshTaxDisplays = () => {
+    const net = calculateTaxNet(netRobuxInput.value);
+    const gross = calculateGross(net);
+    const fee = gross - net;
+
+    grossDisplay.textContent = `${formatNumber(gross)} R$`;
+    feeDisplay.textContent = `${formatNumber(fee)} R$`;
+    grossSummaryValue.textContent = gross ? `${formatNumber(gross)} R$` : '—';
+    grossSummaryValue.classList.toggle('is-zero', !gross);
+
+    const robuxValue = parseRobux(robux);
+    useMainRobuxBtn.hidden = robuxValue === 0;
+    if (robuxValue > 0) {
+        useMainRobuxBtn.textContent = `Use ${formatNumber(robuxValue)} R$`;
+    }
+
+    clearTaxBtn.hidden = net === 0;
+};
+
+const persistTaxCalculator = () => {
+    const net = calculateTaxNet(netRobuxInput.value);
+
+    if (net > 0) {
+        setStoredItem(STORAGE_KEYS.taxNetRobux, net.toString());
+    } else {
+        removeStoredItem(STORAGE_KEYS.taxNetRobux);
+    }
+};
+
+const setTaxNetRobux = (value, { keepCaret = false } = {}) => {
+    const net = calculateTaxNet(value);
+
+    if (keepCaret) {
+        setFormattedValueKeepingCaret(netRobuxInput, net ? formatNumber(net) : '');
+    } else {
+        netRobuxInput.value = net ? formatNumber(net) : '';
+    }
+
+    refreshTaxDisplays();
+    persistTaxCalculator();
+};
+
+const clearTaxCalculator = ({ focus = false } = {}) => {
+    netRobuxInput.value = '';
+    refreshTaxDisplays();
+    removeStoredItem(STORAGE_KEYS.taxNetRobux);
+
+    if (focus) {
+        netRobuxInput.focus();
+    }
+};
+
+const restoreTaxCalculator = () => {
+    const storedNet = getStoredItem(STORAGE_KEYS.taxNetRobux);
+
+    if (storedNet && parseRobux(storedNet) > 0) {
+        setTaxNetRobux(storedNet);
+    } else {
+        refreshTaxDisplays();
+    }
+};
+
+const setTaxPanelOpen = (open, { focusNet = false } = {}) => {
+    taxPanel.hidden = !open;
+    taxToggleBtn.setAttribute('aria-expanded', String(open));
+    setStoredItem(STORAGE_KEYS.taxPanelOpen, open ? 'true' : 'false');
+
+    if (open) {
+        if (focusNet) {
+            netRobuxInput.focus();
+            if (netRobuxInput.value) netRobuxInput.select();
+        }
+    } else if (taxPanel.contains(document.activeElement)) {
+        taxToggleBtn.focus();
+    }
+};
+
 const renderRateStatus = () => {
-    const statusClasses = ['is-live', 'is-cache', 'is-manual', 'is-default'];
+    const statusClasses = ['is-live', 'is-cache', 'is-manual', 'is-default', 'is-stale'];
     rateDot.classList.remove(...statusClasses);
     rateDot.classList.add(`is-${rateSource}`);
+    resetRateBtn.hidden = rateSource !== 'manual';
 
     if (isRateRequestInFlight) {
-        rateStatusText.textContent = 'Checking live rate';
+        rateStatusText.textContent = rateSource === 'manual'
+            ? 'Manual rate active; checking live rate'
+            : 'Checking live rate';
         return;
     }
 
     const timeLabel = getTimeLabel(rateUpdatedAt);
 
-    if (rateSource === 'live') {
+    if (rateSource === 'manual') {
+        rateStatusText.textContent = 'Manual rate active';
+    } else if (isMarketRateStale()) {
+        rateDot.classList.remove(`is-${rateSource}`);
+        rateDot.classList.add('is-stale');
+        rateStatusText.textContent = timeLabel ? `Rate from ${timeLabel} may be stale` : 'Rate may be stale';
+    } else if (rateSource === 'live') {
         rateStatusText.textContent = timeLabel ? `Updated ${timeLabel}` : 'Live rate';
     } else if (rateSource === 'cache') {
         rateStatusText.textContent = timeLabel ? `Cached ${timeLabel}` : 'Cached rate';
-    } else if (rateSource === 'manual') {
-        rateStatusText.textContent = 'Manual rate';
     } else {
         rateStatusText.textContent = 'Offline - default rate';
     }
@@ -260,11 +432,23 @@ const updateUI = ({ announce = true } = {}) => {
     const rawUsd = parseUsd(usd);
     const tryDisplay = formatTryAmount(rawUsd * tryRate);
 
-    if (document.activeElement !== mainInput) {
-        mainInput.value = formatNumber(robux);
+    if (document.activeElement !== heroInput) {
+        renderHeroValue();
     }
 
-    updateSummary(rawUsd, tryDisplay);
+    const isUsdMode = entryMode === 'usd';
+    robuxRow.hidden = !isUsdMode;
+    usdRow.hidden = isUsdMode;
+    if (isUsdMode) {
+        const robuxValue = parseRobux(robux);
+        resultRobux.textContent = `R$${formatNumber(robux) || '0'}`;
+        resultRobux.classList.toggle('is-zero', !robuxValue);
+    }
+
+    resultUsd.textContent = `$${formatUsdInput(rawUsd)}`;
+    resultUsd.classList.toggle('is-zero', !rawUsd);
+    resultTry.textContent = `₺${tryDisplay}`;
+    resultTry.classList.toggle('is-zero', !rawUsd);
 
     if (document.activeElement !== tryRateInput) {
         tryRateInput.value = tryRate.toFixed(2);
@@ -272,6 +456,7 @@ const updateUI = ({ announce = true } = {}) => {
 
     clearBtn.hidden = !robux && !usd;
     updateThresholdHint();
+    refreshTaxDisplays();
     renderRateStatus();
 
     if (announce) {
@@ -279,21 +464,28 @@ const updateUI = ({ announce = true } = {}) => {
     }
 };
 
-const triggerFlash = () => {
-    [summaryUsdWrapper, summaryTryWrapper].forEach((element) => element.classList.add('flash'));
-    setTimeout(() => {
-        [summaryUsdWrapper, summaryTryWrapper].forEach((element) => element.classList.remove('flash'));
-    }, 400);
+const restoreCachedRate = () => {
+    const cachedRate = Number.parseFloat(getStoredItem(STORAGE_KEYS.marketTryRate));
+    if (!Number.isFinite(cachedRate) || cachedRate <= 0) return false;
+
+    marketTryRate = cachedRate;
+    marketRateSource = 'cache';
+    const timestamp = Number.parseInt(getStoredItem(STORAGE_KEYS.marketTryRateTimestamp), 10);
+    rateUpdatedAt = Number.isFinite(timestamp) ? timestamp : null;
+    return true;
 };
 
-const restoreCachedRate = () => {
-    const cachedRate = Number.parseFloat(getStoredItem(STORAGE_KEYS.tryRate));
-    if (!Number.isFinite(cachedRate) || cachedRate <= 0) return;
+const restoreManualRate = () => {
+    const storedManualRate = Number.parseFloat(getStoredItem(STORAGE_KEYS.manualTryRate));
 
-    tryRate = cachedRate;
-    rateSource = 'cache';
-    const timestamp = Number.parseInt(getStoredItem(STORAGE_KEYS.tryRateTimestamp), 10);
-    rateUpdatedAt = Number.isFinite(timestamp) ? timestamp : null;
+    if (Number.isFinite(storedManualRate) && storedManualRate > 0) {
+        manualTryRate = storedManualRate;
+    }
+};
+
+const clearManualRate = () => {
+    manualTryRate = null;
+    removeStoredItem(STORAGE_KEYS.manualTryRate);
 };
 
 const fetchExchangeRate = async (userInitiated = false) => {
@@ -320,27 +512,33 @@ const fetchExchangeRate = async (userInitiated = false) => {
             throw new Error('Rate service returned an invalid TRY rate');
         }
 
-        tryRate = liveRate;
-        rateSource = 'live';
+        marketTryRate = liveRate;
+        marketRateSource = 'live';
         rateUpdatedAt = Date.now();
-        setStoredItem(STORAGE_KEYS.tryRate, tryRate.toString());
-        setStoredItem(STORAGE_KEYS.tryRateTimestamp, rateUpdatedAt.toString());
+        setStoredItem(STORAGE_KEYS.marketTryRate, marketTryRate.toString());
+        setStoredItem(STORAGE_KEYS.marketTryRateTimestamp, rateUpdatedAt.toString());
+        syncEffectiveRate();
         updateUI({ announce: false });
 
         if (userInitiated) {
-            showToast('Live rate updated');
+            showToast(rateSource === 'manual' ? 'Live rate updated; manual rate remains active' : 'Live rate updated');
         }
     } catch (error) {
         console.error('Exchange rate could not be fetched:', error);
 
-        if (rateSource !== 'manual') {
+        if (marketRateSource === 'default') {
             restoreCachedRate();
         }
 
+        syncEffectiveRate();
         updateUI({ announce: false });
 
         if (userInitiated) {
-            showToast(rateSource === 'cache' ? 'Using cached rate' : 'Rate could not be updated');
+            if (rateSource === 'manual') {
+                showToast('Rate could not be updated; manual rate remains active');
+            } else {
+                showToast(rateSource === 'cache' ? 'Using cached rate' : 'Rate could not be updated');
+            }
         }
     } finally {
         isRateRequestInFlight = false;
@@ -377,6 +575,15 @@ const copyText = async (text) => {
     }
 };
 
+const copyRobux = async () => {
+    const robuxValue = parseRobux(robux);
+    if (!robuxValue) return;
+
+    if (await copyText(robuxValue.toString())) {
+        showToast('Robux copied');
+    }
+};
+
 const copyUsd = async () => {
     const rawUsd = parseUsd(usd);
     if (!rawUsd) return;
@@ -395,195 +602,132 @@ const copyTry = async () => {
     }
 };
 
-const resetTaxCalculator = () => {
-    netRobuxInput.value = '';
-    grossRobuxInput.value = '0';
-    taxAmountDisplay.textContent = '0 R$';
-};
+const copyGross = async () => {
+    const gross = calculateGross(calculateTaxNet(netRobuxInput.value));
+    if (!gross) return;
 
-const syncDrawerMode = () => {
-    if (DESKTOP_QUERY.matches) {
-        taxDrawer.classList.remove('open');
-        taxDrawer.setAttribute('aria-hidden', 'false');
-        taxContent.removeAttribute('inert');
-        taxContent.setAttribute('role', 'region');
-        taxContent.removeAttribute('aria-modal');
-        return;
+    if (await copyText(gross.toString())) {
+        showToast('Gross Robux copied');
     }
-
-    const isOpen = taxDrawer.classList.contains('open');
-    taxDrawer.setAttribute('aria-hidden', String(!isOpen));
-    taxContent.setAttribute('role', 'dialog');
-    taxContent.setAttribute('aria-modal', 'true');
-
-    if (isOpen) {
-        taxContent.removeAttribute('inert');
-    } else {
-        taxContent.setAttribute('inert', '');
-    }
-};
-
-const openDrawer = () => {
-    if (DESKTOP_QUERY.matches) return;
-
-    lastDrawerTrigger = document.activeElement;
-    resetTaxCalculator();
-    taxDrawer.classList.add('open');
-    syncDrawerMode();
-
-    requestAnimationFrame(() => netRobuxInput.focus());
-};
-
-const closeDrawer = () => {
-    if (DESKTOP_QUERY.matches || !taxDrawer.classList.contains('open')) return;
-
-    taxDrawer.classList.remove('open');
-    syncDrawerMode();
-
-    if (lastDrawerTrigger instanceof HTMLElement && document.contains(lastDrawerTrigger)) {
-        lastDrawerTrigger.focus();
-    }
-
-    lastDrawerTrigger = null;
-};
-
-const trapDrawerFocus = (event) => {
-    if (event.key !== 'Tab' || DESKTOP_QUERY.matches || !taxDrawer.classList.contains('open')) return;
-
-    const focusableElements = Array.from(taxContent.querySelectorAll(
-        'button:not([disabled]), input:not([disabled]):not([readonly]), [tabindex]:not([tabindex="-1"])'
-    ));
-
-    if (!focusableElements.length) return;
-
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    if (event.shiftKey && (document.activeElement === firstElement || !taxContent.contains(document.activeElement))) {
-        event.preventDefault();
-        lastElement.focus();
-    } else if (!event.shiftKey && document.activeElement === lastElement) {
-        event.preventDefault();
-        firstElement.focus();
-    }
-};
-
-const calculateFromNet = (value) => {
-    const net = Math.min(parseRobux(value), TAX_MAX_ROBUX);
-    const gross = Math.floor(net / (1 - TAX_RATE));
-    const tax = gross - net;
-
-    grossRobuxInput.value = formatNumber(gross);
-    taxAmountDisplay.textContent = `${formatNumber(tax)} R$`;
-};
-
-const normalizeTaxInput = (value) => Math.min(parseRobux(value), TAX_MAX_ROBUX);
-
-const allowTaxInputKey = (event) => {
-    const controlKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'Tab', 'Enter'];
-    if (event.ctrlKey || event.metaKey || event.altKey || controlKeys.includes(event.key)) return;
-    if (!/^\d$/.test(event.key)) event.preventDefault();
 };
 
 themeToggle.addEventListener('click', () => {
     applyTheme(root.dataset.theme === 'light' ? 'dark' : 'light', true);
 });
 
-mainInput.addEventListener('focus', () => mainInput.select());
-mainInput.addEventListener('input', (event) => {
-    const digits = event.target.value.replace(/\D/g, '').slice(0, MAX_MAIN_ROBUX_DIGITS);
-    setFormattedValueKeepingCaret(event.target, formatNumber(digits));
-    updateFromRobux(digits);
-    updateUI();
-});
-
-summaryUsdInput.addEventListener('focus', () => summaryUsdInput.select());
-summaryUsdInput.addEventListener('input', (event) => {
-    updateFromUsd(event.target.value);
-    updateUI();
-});
-
-summaryUsdInput.addEventListener('blur', () => updateUI());
-summaryUsdWrapper.addEventListener('pointerdown', (event) => {
-    if (event.target === summaryUsdInput || event.target.closest('button')) return;
-
-    event.preventDefault();
-    summaryUsdInput.focus();
-    summaryUsdInput.select();
-});
-
-clearBtn.addEventListener('click', () => {
-    mainInput.blur();
-    summaryUsdInput.blur();
-    clear();
-    triggerFlash();
-    updateUI();
-});
-
-document.querySelectorAll('.amount-chip').forEach((button) => {
+[modeRobuxBtn, modeUsdBtn].forEach((button) => {
     button.addEventListener('click', () => {
-        updateFromRobux(button.dataset.robux || '');
-        mainInput.value = formatNumber(robux);
-        updateUI();
+        if (button.dataset.mode !== entryMode) {
+            applyEntryMode(button.dataset.mode);
+            persistCalculatorState();
+            updateUI({ announce: false });
+            renderHeroValue();
+        }
+
+        heroInput.focus();
+        heroInput.select();
     });
 });
+
+heroInput.addEventListener('focus', () => heroInput.select());
+heroInput.addEventListener('input', (event) => {
+    if (entryMode === 'robux') {
+        const digits = event.target.value.replace(/\D/g, '').slice(0, MAX_MAIN_ROBUX_DIGITS);
+        setFormattedValueKeepingCaret(event.target, formatNumber(digits));
+        setFromRobux(digits);
+    } else {
+        const sanitized = sanitizeUsdText(event.target.value);
+        setFormattedValueKeepingCaret(event.target, sanitized);
+        setFromUsd(sanitized);
+    }
+
+    persistCalculatorState();
+    updateUI();
+});
+heroInput.addEventListener('blur', () => renderHeroValue());
+
+clearBtn.addEventListener('click', () => {
+    heroInput.blur();
+    clearAmounts();
+    persistCalculatorState();
+    updateUI();
+    heroInput.focus();
+});
+
+taxToggleBtn.addEventListener('click', () => {
+    setTaxPanelOpen(taxPanel.hidden, { focusNet: taxPanel.hidden });
+});
+
+netRobuxInput.addEventListener('input', (event) => {
+    const digits = event.target.value.replace(/\D/g, '');
+    const net = calculateTaxNet(digits);
+    setFormattedValueKeepingCaret(event.target, net ? formatNumber(net) : '');
+    refreshTaxDisplays();
+    persistTaxCalculator();
+});
+
+useMainRobuxBtn.addEventListener('click', () => {
+    const current = parseRobux(robux);
+    if (!current) return;
+
+    setTaxNetRobux(current);
+    netRobuxInput.focus();
+    netRobuxInput.select();
+    showToast('Current Robux added to tax calculator');
+});
+
+clearTaxBtn.addEventListener('click', () => clearTaxCalculator({ focus: true }));
+grossCopyBtn.addEventListener('click', copyGross);
+robuxCopyBtn.addEventListener('click', copyRobux);
+usdCopyBtn.addEventListener('click', copyUsd);
+tryCopyBtn.addEventListener('click', copyTry);
 
 tryRateInput.addEventListener('input', (event) => {
     const value = parseUsd(event.target.value);
     if (value <= 0) return;
 
-    tryRate = value;
-    rateSource = 'manual';
-    rateUpdatedAt = Date.now();
-    setStoredItem(STORAGE_KEYS.tryRate, tryRate.toString());
-    setStoredItem(STORAGE_KEYS.tryRateTimestamp, rateUpdatedAt.toString());
+    manualTryRate = value;
+    setStoredItem(STORAGE_KEYS.manualTryRate, manualTryRate.toString());
+    syncEffectiveRate();
     updateUI();
 });
 
 tryRateInput.addEventListener('blur', () => updateUI());
 refreshRateBtn.addEventListener('click', () => fetchExchangeRate(true));
+resetRateBtn.addEventListener('click', () => {
+    clearManualRate();
+    syncEffectiveRate();
+    updateUI({ announce: false });
 
-usdCopyBtn.addEventListener('click', copyUsd);
-tryCopyBtn.addEventListener('click', copyTry);
-
-openTaxBtn.addEventListener('click', openDrawer);
-closeTaxBtn.addEventListener('click', closeDrawer);
-taxDrawer.addEventListener('click', (event) => {
-    if (!DESKTOP_QUERY.matches && event.target === taxDrawer) {
-        closeDrawer();
-    }
-});
-taxDrawer.addEventListener('keydown', trapDrawerFocus);
-
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-        closeDrawer();
+    if (marketRateSource === 'default' || isMarketRateStale()) {
+        fetchExchangeRate(true);
+    } else {
+        showToast('Using the latest available rate');
     }
 });
 
-netRobuxInput.addEventListener('keydown', allowTaxInputKey);
-netRobuxInput.addEventListener('input', (event) => {
-    const digits = event.target.value.replace(/\D/g, '');
-    const value = normalizeTaxInput(digits);
-    setFormattedValueKeepingCaret(event.target, digits ? formatNumber(value) : '');
-    calculateFromNet(value);
-});
+const refreshRateIfNeeded = () => {
+    if (marketRateSource === 'default' || isMarketRateStale()) {
+        fetchExchangeRate();
+    }
+};
 
-grossCopyBtn.addEventListener('click', async () => {
-    const gross = parseRobux(grossRobuxInput.value);
-    if (!gross) return;
-
-    if (await copyText(gross.toString())) {
-        showToast('Gross Robux copied');
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        refreshRateIfNeeded();
     }
 });
-
-DESKTOP_QUERY.addEventListener('change', syncDrawerMode);
+window.addEventListener('online', () => fetchExchangeRate());
 
 initializeTheme();
 restoreCachedRate();
+restoreManualRate();
+syncEffectiveRate();
+restoreCalculatorState();
+applyEntryMode(entryMode);
+restoreTaxCalculator();
+setTaxPanelOpen(getStoredItem(STORAGE_KEYS.taxPanelOpen) === 'true');
 devexChip.textContent = `1 R$ = $${DEVEX_RATE.toFixed(4)}`;
-syncDrawerMode();
 updateUI({ announce: false });
 fetchExchangeRate();
 setInterval(fetchExchangeRate, 24 * 60 * 60 * 1000);

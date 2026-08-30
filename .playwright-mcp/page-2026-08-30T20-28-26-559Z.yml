@@ -1,0 +1,39 @@
+- generic [ref=e2] [box=433,404,384,422]:
+  - banner [ref=e3] [box=433,404,384,40]:
+    - heading "DevEx Calculator" [level=1] [ref=e8] [box=461,415,117,17]
+    - button "Use dark theme" [pressed] [ref=e9] [cursor=pointer] [box=773,404,40,40]
+  - main [ref=e12] [box=433,454,384,260]:
+    - group "Amount entry mode" [ref=e13] [box=446,467,358,37]:
+      - button "Robux" [pressed] [ref=e14] [cursor=pointer] [box=449,470,175,31]
+      - button "USD" [ref=e15] [cursor=pointer] [box=626,470,175,31]
+    - generic [ref=e16] [box=446,504,358,49]:
+      - generic [ref=e17] [box=449,519,32,26]: R$
+      - textbox "Robux amount" [ref=e18] [box=487,515,314,31]:
+        - /placeholder: "0"
+    - list [ref=e19] [box=446,563,358,138]:
+      - listitem [ref=e20] [box=446,564,358,46]:
+        - generic [ref=e21] [box=448,580,23,12]: USD
+        - strong [ref=e22] [box=481,576,276,20]: $0.00
+        - button "Copy USD amount" [ref=e23] [cursor=pointer] [box=766,569,35,35]
+      - listitem [ref=e27] [box=446,610,358,46]:
+        - generic [ref=e28] [box=448,626,23,12]: TRY
+        - strong [ref=e29] [box=480,622,276,20]: ₺0.00
+        - button "Copy TRY amount" [ref=e30] [cursor=pointer] [box=766,615,35,35]
+      - listitem [ref=e34] [box=446,656,358,46]:
+        - button "Gross price —" [ref=e35] [cursor=pointer] [box=446,656,358,46]:
+          - generic [ref=e36] [box=448,672,74,12]: Gross price
+          - strong [ref=e37] [box=531,668,245,20]: —
+  - contentinfo [ref=e40] [box=433,725,384,101]:
+    - generic [ref=e41] [box=438,725,373,32]:
+      - generic [ref=e42] [box=438,734,80,14]: 1 R$ = $0.0038
+      - generic [ref=e43] [box=673,725,138,32]:
+        - generic [ref=e44] [box=673,735,38,12]: 1 USD =
+        - generic [ref=e45] [box=672,740,1,1]: TRY exchange rate per USD
+        - spinbutton "TRY exchange rate per USD" [ref=e46] [box=716,725,70,32]: "48.25"
+        - generic [ref=e47] [box=790,735,21,12]: TRY
+    - generic [ref=e48] [box=438,761,373,34]:
+      - generic [ref=e50] [box=454,772,90,12]: Checking live rate
+      - button "Refresh exchange rate" [disabled] [ref=e52] [box=777,761,34,34]
+    - group [ref=e56] [box=438,800,373,26]:
+      - generic "How estimates work" [ref=e57] [cursor=pointer] [box=433,800,111,26]
+  - status [box=608,1201,34,20]
