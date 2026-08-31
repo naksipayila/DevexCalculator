@@ -188,7 +188,7 @@ input:focus-visible {
     color: var(--ink);
     background: var(--accent-soft);
     transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--shadow-c);
+    box-shadow: var(--shadow-sm);
 }
 
 .icon-btn:active {
@@ -530,7 +530,7 @@ input:focus-visible {
 
 .chip-btn:hover {
     transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--shadow-c);
+    box-shadow: var(--shadow-sm);
     filter: brightness(1.05);
 }
 

@@ -222,7 +222,7 @@ const applyTheme = (theme, persist = false) => {
     root.dataset.theme = theme;
     themeToggle.setAttribute('aria-pressed', String(theme === 'light'));
     themeToggle.setAttribute('aria-label', theme === 'light' ? 'Use dark theme' : 'Use light theme');
-    metaThemeColor.content = theme === 'light' ? '#f2ede2' : '#0e0f14';
+    metaThemeColor.content = getComputedStyle(root).getPropertyValue('--bg').trim();
 
     if (persist) {
         setStoredItem(STORAGE_KEYS.theme, theme);
@@ -249,7 +249,7 @@ function setFromRobux(value) {
 function setFromUsd(value) {
     entryMode = 'usd';
     const rawUsd = parseUsd(value);
-    usd = value && value.toString().trim() && rawUsd ? rawUsd.toFixed(2) : '';
+    usd = rawUsd ? rawUsd.toFixed(2) : '';
     robux = usd ? String(Math.round(rawUsd / DEVEX_RATE)) : '';
 }
 
@@ -416,8 +416,6 @@ const renderRateStatus = () => {
         message = timeLabel ? `Rate from ${timeLabel} may be stale` : 'Rate may be stale';
     } else if (rateSource === 'cache') {
         message = timeLabel ? `Cached ${timeLabel}` : 'Cached rate';
-    } else if (rateSource === 'live') {
-        message = timeLabel ? `Updated ${timeLabel}` : 'Live rate';
     } else {
         message = 'Offline - default rate';
     }
@@ -465,13 +463,12 @@ const updateUI = ({ announce = true } = {}) => {
 
 const restoreCachedRate = () => {
     const cachedRate = Number.parseFloat(getStoredItem(STORAGE_KEYS.marketTryRate));
-    if (!Number.isFinite(cachedRate) || cachedRate <= 0) return false;
+    if (!Number.isFinite(cachedRate) || cachedRate <= 0) return;
 
     marketTryRate = cachedRate;
     marketRateSource = 'cache';
     const timestamp = Number.parseInt(getStoredItem(STORAGE_KEYS.marketTryRateTimestamp), 10);
     rateUpdatedAt = Number.isFinite(timestamp) ? timestamp : null;
-    return true;
 };
 
 const restoreManualRate = () => {
