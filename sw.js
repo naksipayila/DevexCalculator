@@ -1,14 +1,11 @@
-const CACHE_NAME = 'devex-calculator-v66';
+const CACHE_NAME = 'devex-calculator-v67';
 const APP_SHELL = [
     './',
     './index.html',
     './style.css?v=61',
     './app.js?v=63',
     './manifest.webmanifest',
-    './favicon.png',
-    './icon-192.png',
-    './icon-512.png',
-    './apple-touch-icon.png'
+    './icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
