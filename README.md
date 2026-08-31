@@ -4,11 +4,11 @@
 
 # DevEx Calculator
 
-**Robux → USD → TL** — DevEx ödemelerini saniyeler içinde hesapla.
+**Robux → USD → TRY** — estimate DevEx payouts in seconds.
 
-Sıfır bağımlılık · tamamen statik · PWA · offline çalışır
+Zero dependencies · fully static · PWA · works offline
 
-[**🚀 Canlı Demo**](https://naksipayila.github.io/DevexCalculator/)
+[**🚀 Live Demo**](https://naksipayila.github.io/DevexCalculator/)
 
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
@@ -22,74 +22,74 @@ Sıfır bağımlılık · tamamen statik · PWA · offline çalışır
 
 <table align="center">
   <tr>
-    <td align="center"><img src="assets/screenshot-dark.png" alt="Koyu tema" width="420" /></td>
-    <td align="center"><img src="assets/screenshot-light.png" alt="Açık tema" width="420" /></td>
+    <td align="center"><img src="assets/screenshot-dark.png" alt="Dark theme" width="420" /></td>
+    <td align="center"><img src="assets/screenshot-light.png" alt="Light theme" width="420" /></td>
   </tr>
   <tr>
-    <td align="center"><sub>🌙 Koyu Tema</sub></td>
-    <td align="center"><sub>☀️ Açık Tema</sub></td>
+    <td align="center"><sub>🌙 Dark</sub></td>
+    <td align="center"><sub>☀️ Light</sub></td>
   </tr>
 </table>
 
 ---
 
-## ✨ Özellikler
+## ✨ Features
 
 | | |
 |---|---|
-| 💱 **Anlık dönüşüm** | Robux veya USD giriş modu; diğer para birimleri her tuş vuruşunda hesaplanır |
-| 📈 **Canlı USD/TRY** | [open.er-api.com](https://open.er-api.com/) üzerinden güncel kur; manuel kur girişi ve canlı kurda sıfırlama |
-| 🧾 **Brüt fiyat hesaplayıcı** | %30 Roblox komisyonu sonrası hedef net Robux için istenmesi gereken satış fiyatı + komisyon dökümü |
-| ✅ **DevEx minimum uyarısı** | 30,000 R$ altı tutarlarda anında bilgilendirme |
-| 📋 **Tek tıkla kopyalama** | Robux, USD, TRY ve brüt fiyat değerleri panoya kopyalanır |
-| 🌗 **Koyu / açık tema** | Tercih tarayıcıda saklanır |
-| 📴 **Offline (PWA)** | Service worker ile uygulama kabuğu önbelleklenir, kur önbellekten gösterilir |
+| **Instant conversion** | Robux or USD entry mode; the other currencies update on every keystroke |
+| **Live USD/TRY rate** | Fetched from [open.er-api.com](https://open.er-api.com/), with manual override and reset to live |
+| **Gross price calculator** | Sale price needed to net a target Robux amount after the 30% Roblox fee, plus fee breakdown |
+| **DevEx minimum guard** | Instant hint below the 30,000 R$ payout threshold |
+| **One-click copy** | Robux, USD, TRY and gross values to the clipboard |
+| **Dark / light theme** | Preference persisted in the browser |
+| **Offline (PWA)** | App shell cached by a service worker; last rate served from cache |
 
 ---
 
-## 🧮 Nasıl Hesaplıyor?
+## 🧮 How It Calculates
 
 ```text
-USD      = Robux × 0.0038        (sabit DevEx kuru)
-TRY      = USD × kur              (canlı / manuel USD/TRY)
-Brüt Fiyat = ⌈ Net Robux ÷ 0.70 ⌉ (%30 komisyon sonrası neti tutturmak için)
+USD           = Robux × 0.0038          (fixed DevEx rate)
+TRY           = USD × rate              (live / manual USD-TRY)
+Gross price   = ceil(Net Robux ÷ 0.70)  (to net the target after the 30% fee)
 ```
 
-> DevEx kuru (1 R$ = $0.0038) ve %30 pazar yeri komisyonu Roblox tarafından belirlenir;
-> nihai uygunluk ve ödeme koşulları için resmi Roblox dokümanlarına bakın.
+> The DevEx rate (1 R$ = $0.0038) and the 30% marketplace fee are set by Roblox;
+> final eligibility and payout terms are determined by Roblox, not this app.
 
 ---
 
-## ⚡ Hızlı Başlangıç
+## ⚡ Quick Start
 
-Kurulum yok, build yok — sadece statik dosyalar:
+No install, no build — static files only:
 
 ```bash
-# yerelde çalıştır
+# serve locally
 python -m http.server 8000
 # → http://localhost:8000
 ```
 
-> Service worker ve pano API'si için `localhost` gibi güvenli bir bağlam gerekir (`file://` çalışmaz).
+> The service worker and clipboard APIs require a secure context like `localhost` (`file://` won't work).
 
 ---
 
-## 📁 Proje Yapısı
+## Project Structure
 
 ```text
 DevexCalculator/
-├── index.html            # Markup, a11y, cache-busted asset referansları
-├── app.js                # Tüm state, hesaplama, kur çekme, kalıcılık
-├── style.css             # Design token'lar, koyu/açık tema, layout
+├── index.html            # Markup, a11y, cache-busted asset refs
+├── app.js                # All state, calculations, rate fetching, persistence
+├── style.css             # Design tokens, dark/light theme, layout
 ├── sw.js                 # Cache-first app-shell service worker
 ├── manifest.webmanifest  # PWA manifest
-└── assets/               # Ekran görüntüleri
+└── assets/               # Screenshots
 ```
 
 ---
 
 <div align="center">
 
-Roblox geliştiricileri için sevgiyle yapıldı 💛
+Made for Roblox developers 💛
 
 </div>
