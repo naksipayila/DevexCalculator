@@ -16,6 +16,7 @@ const STORAGE_KEYS = {
     taxPanelOpen: 'taxPanelOpen',
     theme: 'theme'
 };
+const RATE_DOT_CLASSES = ['is-live', 'is-cache', 'is-manual', 'is-default', 'is-stale'];
 
 let robux = '';
 let usd = '';
@@ -396,7 +397,7 @@ const renderRateStatus = () => {
     const baseLabel = 'Refresh exchange rate';
 
     if (!showStatusLine) {
-        rateDot.classList.remove('is-live', 'is-cache', 'is-manual', 'is-default', 'is-stale');
+        rateDot.classList.remove(...RATE_DOT_CLASSES);
         rateDot.classList.add('is-live');
         refreshRateBtn.title = timeLabel ? `${baseLabel} (updated ${timeLabel})` : baseLabel;
         refreshRateBtn.setAttribute('aria-label', timeLabel ? `${baseLabel}, updated ${timeLabel}` : baseLabel);
@@ -426,7 +427,7 @@ const renderRateStatus = () => {
         message = 'Offline - default rate';
     }
 
-    rateDot.classList.remove('is-live', 'is-cache', 'is-manual', 'is-default', 'is-stale');
+    rateDot.classList.remove(...RATE_DOT_CLASSES);
     rateDot.classList.add(dotClass);
     rateStatusText.textContent = message;
 };

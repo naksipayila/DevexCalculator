@@ -11,7 +11,7 @@ Static hosting only; any file server works. For the service worker and clipboard
 
 ## Validation
 
-Manual, through the Playwright MCP configured in `opencode.json` (`npx -y @playwright/mcp@latest --snapshot-boxes`): load the served app, exercise both entry modes, the tax panel, rate manual/refresh/reset flows, theme toggle, and copy buttons, and check console for errors.
+Manual, through the Playwright MCP configured in `opencode.json` (`npx -y @playwright/mcp@latest --snapshot-boxes --browser chromium`): load the served app, exercise both entry modes, the tax panel, rate manual/refresh/reset flows, theme toggle, and copy buttons, and check console for errors.
 
 ## Release checklist (evidenced convention)
 

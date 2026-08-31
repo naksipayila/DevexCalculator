@@ -19,4 +19,4 @@
 
 ## Asset versioning
 
-- Cache busting via `?v=N` on `app.js`/`style.css` refs in `index.html`; bump the changed asset's version and `sw.js` `CACHE_NAME`/pre-cache entry together (they currently differ per asset: css v53, js v56).
+- Cache busting via `?v=N` on `app.js`/`style.css` refs in `index.html`; versions advance per asset independently, so bump the changed asset's version and the matching `sw.js` pre-cache entry plus `CACHE_NAME` together.

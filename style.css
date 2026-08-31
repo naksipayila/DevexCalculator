@@ -644,6 +644,8 @@ input:focus-visible {
     font-variant-numeric: tabular-nums;
     box-shadow: var(--shadow-btn);
     transition: background-color 0.14s ease, border-color 0.14s ease;
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .rate-input:focus {
@@ -655,11 +657,6 @@ input:focus-visible {
 .rate-input::-webkit-inner-spin-button {
     margin: 0;
     -webkit-appearance: none;
-}
-
-.rate-input {
-    -moz-appearance: textfield;
-    appearance: textfield;
 }
 
 .status-line {
