@@ -231,8 +231,7 @@ const applyTheme = (theme, persist = false) => {
 
 const initializeTheme = () => {
     const storedTheme = getStoredItem(STORAGE_KEYS.theme);
-    const systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-    const theme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : systemTheme;
+    const theme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'light';
     applyTheme(theme);
 };
 
