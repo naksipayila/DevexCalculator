@@ -390,7 +390,7 @@ const setTaxPanelOpen = (open, { focusNet = false } = {}) => {
 
 const renderRateStatus = () => {
     const timeLabel = getTimeLabel(rateUpdatedAt);
-    const showStatusLine = isRateRequestInFlight || rateSource !== 'live' || isMarketRateStale();
+    const showStatusLine = !isRateRequestInFlight && (rateSource !== 'live' || isMarketRateStale());
     resetRateBtn.hidden = !showStatusLine;
 
     const baseLabel = 'Refresh exchange rate';
@@ -409,11 +409,7 @@ const renderRateStatus = () => {
     let dotClass = `is-${rateSource}`;
     let message;
 
-    if (isRateRequestInFlight) {
-        message = rateSource === 'manual'
-            ? 'Manual rate active; checking live rate'
-            : 'Checking live rate';
-    } else if (rateSource === 'manual') {
+    if (rateSource === 'manual') {
         message = 'Manual rate - Use live';
     } else if (isMarketRateStale()) {
         dotClass = 'is-stale';
