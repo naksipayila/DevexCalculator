@@ -1,4 +1,4 @@
-const CACHE_NAME = 'devex-calculator-v64';
+const CACHE_NAME = 'devex-calculator-v66';
 const APP_SHELL = [
     './',
     './index.html',
