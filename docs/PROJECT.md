@@ -9,7 +9,7 @@ DevEx Calculator estimates Roblox DevEx payouts: converts a Robux or USD amount 
 - TRY conversion at a live USD/TRY rate from open.er-api.com, with manual rate override and reset to live.
 - Gross price panel: net Robux in, `Math.ceil(net / (1 - 0.30))` gross out, fee breakdown, copy, "use main Robux" shortcut.
 - Copy Robux/USD/TRY/gross to clipboard (legacy `execCommand` fallback).
-- Dark/light theme, localStorage persistence of amounts and rates, offline app-shell via service worker.
+- Dark/light theme, localStorage persistence of rates/theme/panel state (entered amounts reset on page load), offline app-shell via service worker.
 
 ## Terminology
 

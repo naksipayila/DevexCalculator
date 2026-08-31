@@ -9,10 +9,6 @@ const STORAGE_KEYS = {
     marketTryRate: 'tryRate',
     marketTryRateTimestamp: 'tryRateTimestamp',
     manualTryRate: 'tryRateManual',
-    calculatorRobux: 'calculatorRobux',
-    calculatorUsd: 'calculatorUsd',
-    calculatorInputSource: 'calculatorInputSource',
-    taxNetRobux: 'taxNetRobux',
     taxPanelOpen: 'taxPanelOpen',
     theme: 'theme'
 };
@@ -275,33 +271,6 @@ const applyEntryMode = (mode) => {
     }
 };
 
-const persistCalculatorState = () => {
-    if (!robux && !usd) {
-        removeStoredItem(STORAGE_KEYS.calculatorRobux);
-        removeStoredItem(STORAGE_KEYS.calculatorUsd);
-        removeStoredItem(STORAGE_KEYS.calculatorInputSource);
-        return;
-    }
-
-    setStoredItem(STORAGE_KEYS.calculatorRobux, robux);
-    setStoredItem(STORAGE_KEYS.calculatorUsd, usd);
-    setStoredItem(STORAGE_KEYS.calculatorInputSource, entryMode);
-};
-
-const restoreCalculatorState = () => {
-    const storedSource = getStoredItem(STORAGE_KEYS.calculatorInputSource);
-    const storedRobux = getStoredItem(STORAGE_KEYS.calculatorRobux);
-    const storedUsd = getStoredItem(STORAGE_KEYS.calculatorUsd);
-
-    if (storedSource === 'usd' && storedUsd) {
-        setFromUsd(storedUsd);
-    } else if (storedRobux) {
-        setFromRobux(storedRobux);
-    } else {
-        entryMode = 'robux';
-    }
-};
-
 const updateThresholdHint = () => {
     const robuxValue = parseRobux(robux);
     const shouldShowHint = robuxValue > 0 && robuxValue < DEVEX_MIN_ROBUX;
@@ -335,41 +304,19 @@ const refreshTaxDisplays = () => {
     clearTaxBtn.hidden = net === 0;
 };
 
-const persistTaxCalculator = () => {
-    const net = calculateTaxNet(netRobuxInput.value);
-
-    if (net > 0) {
-        setStoredItem(STORAGE_KEYS.taxNetRobux, net.toString());
-    } else {
-        removeStoredItem(STORAGE_KEYS.taxNetRobux);
-    }
-};
-
 const setTaxNetRobux = (value) => {
     const net = calculateTaxNet(value);
     netRobuxInput.value = net ? formatNumber(net) : '';
 
     refreshTaxDisplays();
-    persistTaxCalculator();
 };
 
 const clearTaxCalculator = ({ focus = false } = {}) => {
     netRobuxInput.value = '';
     refreshTaxDisplays();
-    removeStoredItem(STORAGE_KEYS.taxNetRobux);
 
     if (focus) {
         netRobuxInput.focus();
-    }
-};
-
-const restoreTaxCalculator = () => {
-    const storedNet = getStoredItem(STORAGE_KEYS.taxNetRobux);
-
-    if (storedNet && parseRobux(storedNet) > 0) {
-        setTaxNetRobux(storedNet);
-    } else {
-        refreshTaxDisplays();
     }
 };
 
@@ -615,7 +562,6 @@ themeToggle.addEventListener('click', () => {
     button.addEventListener('click', () => {
         if (button.dataset.mode !== entryMode) {
             applyEntryMode(button.dataset.mode);
-            persistCalculatorState();
             updateUI({ announce: false });
             renderHeroValue();
         }
@@ -637,7 +583,6 @@ heroInput.addEventListener('input', (event) => {
         setFromUsd(sanitized);
     }
 
-    persistCalculatorState();
     updateUI();
 });
 heroInput.addEventListener('blur', () => renderHeroValue());
@@ -645,7 +590,6 @@ heroInput.addEventListener('blur', () => renderHeroValue());
 clearBtn.addEventListener('click', () => {
     heroInput.blur();
     clearAmounts();
-    persistCalculatorState();
     updateUI();
     heroInput.focus();
 });
@@ -659,7 +603,6 @@ netRobuxInput.addEventListener('input', (event) => {
     const net = calculateTaxNet(digits);
     setFormattedValueKeepingCaret(event.target, net ? formatNumber(net) : '');
     refreshTaxDisplays();
-    persistTaxCalculator();
 });
 
 useMainRobuxBtn.addEventListener('click', () => {
@@ -724,9 +667,9 @@ initializeTheme();
 restoreCachedRate();
 restoreManualRate();
 syncEffectiveRate();
-restoreCalculatorState();
+['calculatorRobux', 'calculatorUsd', 'calculatorInputSource', 'taxNetRobux'].forEach(removeStoredItem);
 applyEntryMode(entryMode);
-restoreTaxCalculator();
+refreshTaxDisplays();
 setTaxPanelOpen(getStoredItem(STORAGE_KEYS.taxPanelOpen) === 'true');
 devexChip.textContent = `1 R$ = $${DEVEX_RATE.toFixed(4)}`;
 updateUI({ announce: false });
