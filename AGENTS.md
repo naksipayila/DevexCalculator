@@ -21,6 +21,7 @@ DevEx Calculator: Robux↔USD dönüştürücü (sabit $0.0038/R$), canlı USD/T
 - `opencode.json`: OpenCode session-context settings.
 - `.opencode/commands/integrate-project.md`: template fill command that populates this template's placeholder docs (`AGENTS.md`, `docs/*.md`) with project truth, either by analyzing an existing host codebase (evidence-driven) or via a staged interview for a new project (user-stated); accepts `report-only` and optional `new` / `existing`.
 - `.opencode/commands/optimize-project.md`: explicit project audit command (dead code, duplication, unused dependencies, redundant files and folders, documentation maintenance); accepts a path or `docs-only` / `code-only` / `report-only`.
+- `.opencode/commands/simplify-project.md`: explicit code-simplification audit (hand-rolled logic with an existing abstraction, needlessly complex control flow, wrong data structures, profile-evidenced performance); behavior-preserving rewrites only, cross-file duplication stays with `/optimize-project`; accepts a path or `report-only`.
 
 # Quick Commands
 
@@ -51,4 +52,4 @@ Scale context by change risk. Do not infer architecture or commands that are not
 
 After meaningful code changes, update documentation only if durable project knowledge changed. Update the smallest canonical document, then remove obsolete or duplicated text and compact that document.
 
-Use local documentation GC for normal changes. Use `/integrate-project` when this template has been copied into an existing codebase or a new project is starting and its placeholder docs need project truth. Use `/optimize-project` for broad cleanup after major refactors, reorganizations, completed migrations, subsystem removal, clear documentation drift, or to audit accumulated dead code, duplication, and redundant files and folders.
+Use local documentation GC for normal changes. Use `/integrate-project` when this template has been copied into an existing codebase or a new project is starting and its placeholder docs need project truth. Use `/optimize-project` for broad cleanup after major refactors, reorganizations, completed migrations, subsystem removal, clear documentation drift, or to audit accumulated dead code, duplication, and redundant files and folders. Use `/simplify-project` for a behavior-preserving code-quality pass: accumulated verbose patterns, hand-rolled logic with an existing abstraction, or a profile-evidenced hot spot.
