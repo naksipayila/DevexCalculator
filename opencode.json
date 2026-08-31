@@ -7,7 +7,9 @@
         "npx",
         "-y",
         "@playwright/mcp@latest",
-        "--snapshot-boxes"
+        "--snapshot-boxes",
+        "--browser",
+        "chromium"
       ],
       "enabled": true
     }
