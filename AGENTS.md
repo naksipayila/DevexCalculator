@@ -17,6 +17,7 @@ DevEx Calculator: Robux↔USD dönüştürücü (sabit $0.0038/R$), canlı USD/T
 - `style.css`: design tokens, dark/light themes, layout.
 - `sw.js`: cache-first app-shell service worker (versioned with `app.js`).
 - `manifest.webmanifest`: PWA manifest.
+- `README.md`: user-facing project intro; screenshots live in `assets/`.
 - `docs/`: lazily loaded project knowledge.
 - `opencode.json`: OpenCode session-context settings.
 - `.opencode/commands/integrate-project.md`: template fill command that populates this template's placeholder docs (`AGENTS.md`, `docs/*.md`) with project truth, either by analyzing an existing host codebase (evidence-driven) or via a staged interview for a new project (user-stated); accepts `report-only` and optional `new` / `existing`.
