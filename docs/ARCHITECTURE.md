@@ -15,6 +15,7 @@ Dependency-free static PWA: plain HTML/CSS/JS, no framework, no build step. Exte
 - Rate: `fetchExchangeRate` → `marketTryRate`/`marketRateSource` → `syncEffectiveRate` (manual override takes precedence) → `tryRate` feeds TRY display.
 - Tax panel: `netRobuxInput` → `calculateTaxNet` (capped at `TAX_MAX_ROBUX`) → `calculateGross` → `refreshTaxDisplays`.
 - Refresh triggers: startup, daily `setInterval`, `visibilitychange`, `online` event, manual button; `isRateRequestInFlight` guards re-entry.
+- The footer status line (`#resetRateBtn`) is shown only when the rate state needs attention (in-flight, manual, cached, stale, offline default); clicking it clears a manual override or re-fetches otherwise. On a fresh live rate the line is hidden and the update time moves into the refresh button's label/title.
 
 ## Persistence
 

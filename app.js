@@ -389,33 +389,46 @@ const setTaxPanelOpen = (open, { focusNet = false } = {}) => {
 };
 
 const renderRateStatus = () => {
-    const statusClasses = ['is-live', 'is-cache', 'is-manual', 'is-default', 'is-stale'];
-    rateDot.classList.remove(...statusClasses);
-    rateDot.classList.add(`is-${rateSource}`);
-    resetRateBtn.hidden = rateSource !== 'manual';
+    const timeLabel = getTimeLabel(rateUpdatedAt);
+    const showStatusLine = isRateRequestInFlight || rateSource !== 'live' || isMarketRateStale();
+    resetRateBtn.hidden = !showStatusLine;
 
-    if (isRateRequestInFlight) {
-        rateStatusText.textContent = rateSource === 'manual'
-            ? 'Manual rate active; checking live rate'
-            : 'Checking live rate';
+    const baseLabel = 'Refresh exchange rate';
+
+    if (!showStatusLine) {
+        rateDot.classList.remove('is-live', 'is-cache', 'is-manual', 'is-default', 'is-stale');
+        rateDot.classList.add('is-live');
+        refreshRateBtn.title = timeLabel ? `${baseLabel} (updated ${timeLabel})` : baseLabel;
+        refreshRateBtn.setAttribute('aria-label', timeLabel ? `${baseLabel}, updated ${timeLabel}` : baseLabel);
         return;
     }
 
-    const timeLabel = getTimeLabel(rateUpdatedAt);
+    refreshRateBtn.title = baseLabel;
+    refreshRateBtn.setAttribute('aria-label', baseLabel);
 
-    if (rateSource === 'manual') {
-        rateStatusText.textContent = 'Manual rate active';
+    let dotClass = `is-${rateSource}`;
+    let message;
+
+    if (isRateRequestInFlight) {
+        message = rateSource === 'manual'
+            ? 'Manual rate active; checking live rate'
+            : 'Checking live rate';
+    } else if (rateSource === 'manual') {
+        message = 'Manual rate - Use live';
     } else if (isMarketRateStale()) {
-        rateDot.classList.remove(`is-${rateSource}`);
-        rateDot.classList.add('is-stale');
-        rateStatusText.textContent = timeLabel ? `Rate from ${timeLabel} may be stale` : 'Rate may be stale';
-    } else if (rateSource === 'live') {
-        rateStatusText.textContent = timeLabel ? `Updated ${timeLabel}` : 'Live rate';
+        dotClass = 'is-stale';
+        message = timeLabel ? `Rate from ${timeLabel} may be stale` : 'Rate may be stale';
     } else if (rateSource === 'cache') {
-        rateStatusText.textContent = timeLabel ? `Cached ${timeLabel}` : 'Cached rate';
+        message = timeLabel ? `Cached ${timeLabel}` : 'Cached rate';
+    } else if (rateSource === 'live') {
+        message = timeLabel ? `Updated ${timeLabel}` : 'Live rate';
     } else {
-        rateStatusText.textContent = 'Offline - default rate';
+        message = 'Offline - default rate';
     }
+
+    rateDot.classList.remove('is-live', 'is-cache', 'is-manual', 'is-default', 'is-stale');
+    rateDot.classList.add(dotClass);
+    rateStatusText.textContent = message;
 };
 
 const updateUI = ({ announce = true } = {}) => {
@@ -685,6 +698,11 @@ tryRateInput.addEventListener('input', (event) => {
 tryRateInput.addEventListener('blur', () => updateUI());
 refreshRateBtn.addEventListener('click', () => fetchExchangeRate(true));
 resetRateBtn.addEventListener('click', () => {
+    if (rateSource !== 'manual') {
+        fetchExchangeRate(true);
+        return;
+    }
+
     clearManualRate();
     syncEffectiveRate();
     updateUI({ announce: false });
