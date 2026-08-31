@@ -60,20 +60,6 @@ Gross price   = ceil(Net Robux ÷ 0.70)  (to net the target after the 30% fee)
 
 ---
 
-## ⚡ Quick Start
-
-No install, no build — static files only:
-
-```bash
-# serve locally
-python -m http.server 8000
-# → http://localhost:8000
-```
-
-> The service worker and clipboard APIs require a secure context like `localhost` (`file://` won't work).
-
----
-
 ## Project Structure
 
 ```text
