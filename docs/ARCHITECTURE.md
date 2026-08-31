@@ -4,9 +4,9 @@ Dependency-free static PWA: plain HTML/CSS/JS, no framework, no build step. Exte
 
 ## Ownership
 
-- `index.html`: markup, a11y attributes, cache-busted asset refs (`?v=N`).
+- `index.html`: markup organized as `.shell` grid panels (`panel-enter`/`panel-results`/`panel-gross`/`panel-rates`; single column on mobile, 2×2 areas ≥46rem). Element ids are the DOM contract consumed by `app.js`. A11y attributes, cache-busted asset refs (`?v=N`).
 - `app.js`: all state (module-level `let`), pure helpers, DOM refs by id, event handlers, persistence, rate fetching. No modules, single global script.
-- `style.css`: design tokens on `:root`, light theme via `:root[data-theme="light"]` overrides.
+- `style.css`: neobrutalist design tokens on `:root` (2px borders, offset hard shadows, yellow accent); light theme via `:root[data-theme="light"]` overrides.
 - `sw.js`: cache-first app shell; `CACHE_NAME` version must stay in sync with the cached `app.js` query version.
 
 ## Data flow

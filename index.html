@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevEx Calculator</title>
-    <meta id="metaThemeColor" name="theme-color" content="#0f1115">
+    <meta id="metaThemeColor" name="theme-color" content="#121417">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=54">
+    <link rel="stylesheet" href="style.css?v=55">
     <link rel="icon" type="image/png" sizes="96x96" href="favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
@@ -32,105 +32,110 @@
             </button>
         </header>
 
-        <main class="card">
-            <div class="segmented" role="group" aria-label="Amount entry mode">
-                <button class="seg-btn is-active" id="modeRobuxBtn" type="button" data-mode="robux" aria-pressed="true">Robux</button>
-                <button class="seg-btn" id="modeUsdBtn" type="button" data-mode="usd" aria-pressed="false">USD</button>
-            </div>
+        <main class="shell">
+            <section class="panel panel-enter" aria-label="Amount entry">
+                <div class="segmented" role="group" aria-label="Amount entry mode">
+                    <button class="seg-btn is-active" id="modeRobuxBtn" type="button" data-mode="robux" aria-pressed="true">Robux</button>
+                    <button class="seg-btn" id="modeUsdBtn" type="button" data-mode="usd" aria-pressed="false">USD</button>
+                </div>
 
-            <div class="hero-row">
-                <span class="hero-prefix" id="heroPrefix" aria-hidden="true">R$</span>
-                <input type="text" id="heroInput" placeholder="0" autocomplete="off" inputmode="numeric" aria-label="Robux amount" aria-describedby="thresholdHint">
-                <button class="icon-btn clear-btn" id="clearBtn" type="button" title="Clear" aria-label="Clear" hidden>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                <div class="hero-row">
+                    <span class="hero-prefix" id="heroPrefix" aria-hidden="true">R$</span>
+                    <input type="text" id="heroInput" placeholder="0" autocomplete="off" inputmode="numeric" aria-label="Robux amount" aria-describedby="thresholdHint">
+                    <button class="icon-btn clear-btn" id="clearBtn" type="button" title="Clear" aria-label="Clear" hidden>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    </button>
+                </div>
+
+                <p class="threshold-hint" id="thresholdHint" hidden></p>
+            </section>
+
+            <section class="panel panel-results" aria-label="Conversion results">
+                <ul class="result-list">
+                    <li class="result-row" id="robuxRow" hidden>
+                        <span class="result-label">Robux</span>
+                        <strong class="result-value is-zero" id="resultRobux">R$0</strong>
+                        <button class="icon-btn copy-btn" id="robuxCopyBtn" type="button" title="Copy Robux" aria-label="Copy Robux amount">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        </button>
+                    </li>
+                    <li class="result-row" id="usdRow">
+                        <span class="result-label">USD</span>
+                        <strong class="result-value is-zero" id="resultUsd">$0.00</strong>
+                        <button class="icon-btn copy-btn" id="usdCopyBtn" type="button" title="Copy USD" aria-label="Copy USD amount">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        </button>
+                    </li>
+                    <li class="result-row">
+                        <span class="result-label">TRY</span>
+                        <strong class="result-value is-zero" id="resultTry">₺0.00</strong>
+                        <button class="icon-btn copy-btn" id="tryCopyBtn" type="button" title="Copy TRY" aria-label="Copy TRY amount">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        </button>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="panel panel-gross" aria-label="Gross price calculator">
+                <button class="gross-toggle" id="taxToggleBtn" type="button" aria-expanded="false" aria-controls="taxPanel">
+                    <span class="result-label">Gross price</span>
+                    <strong class="result-value is-zero" id="grossSummaryValue">—</strong>
+                    <svg class="tax-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
                 </button>
-            </div>
-
-            <p class="threshold-hint" id="thresholdHint" hidden></p>
-
-            <ul class="result-list">
-                <li class="result-row" id="robuxRow" hidden>
-                    <span class="result-label">Robux</span>
-                    <strong class="result-value is-zero" id="resultRobux">R$0</strong>
-                    <button class="icon-btn copy-btn" id="robuxCopyBtn" type="button" title="Copy Robux" aria-label="Copy Robux amount">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
-                </li>
-                <li class="result-row" id="usdRow">
-                    <span class="result-label">USD</span>
-                    <strong class="result-value is-zero" id="resultUsd">$0.00</strong>
-                    <button class="icon-btn copy-btn" id="usdCopyBtn" type="button" title="Copy USD" aria-label="Copy USD amount">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
-                </li>
-                <li class="result-row">
-                    <span class="result-label">TRY</span>
-                    <strong class="result-value is-zero" id="resultTry">₺0.00</strong>
-                    <button class="icon-btn copy-btn" id="tryCopyBtn" type="button" title="Copy TRY" aria-label="Copy TRY amount">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
-                </li>
-                <li class="tax-item">
-                    <button class="result-row tax-toggle-row" id="taxToggleBtn" type="button" aria-expanded="false" aria-controls="taxPanel">
-                        <span class="result-label">Gross price</span>
-                        <strong class="result-value is-zero" id="grossSummaryValue">—</strong>
-                        <svg class="tax-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-                    </button>
-                    <div class="tax-panel" id="taxPanel" hidden>
-                        <label class="tax-label" for="netRobuxInput">Net Robux you receive</label>
-                        <div class="tax-input-row">
-                            <span class="tax-prefix" aria-hidden="true">R$</span>
-                            <input type="text" id="netRobuxInput" placeholder="0" inputmode="numeric" maxlength="13" autocomplete="off">
-                            <button class="chip-btn" id="useMainRobuxBtn" type="button" hidden>Use current</button>
-                        </div>
-                        <div class="tax-facts">
-                            <div class="fact-row">
-                                <span>Roblox fee (30%)</span>
-                                <strong id="feeDisplay">0 R$</strong>
-                            </div>
-                            <div class="fact-row">
-                                <span>Gross sale price</span>
-                                <span class="fact-value">
-                                    <strong id="grossDisplay">0 R$</strong>
-                                    <button class="icon-btn copy-btn" id="grossCopyBtn" type="button" title="Copy" aria-label="Copy gross Robux">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                        <button class="text-btn" id="clearTaxBtn" type="button" hidden>Clear</button>
+                <div class="tax-panel" id="taxPanel" hidden>
+                    <label class="tax-label" for="netRobuxInput">Net Robux you receive</label>
+                    <div class="tax-input-row">
+                        <span class="tax-prefix" aria-hidden="true">R$</span>
+                        <input type="text" id="netRobuxInput" placeholder="0" inputmode="numeric" maxlength="13" autocomplete="off">
+                        <button class="chip-btn" id="useMainRobuxBtn" type="button" hidden>Use current</button>
                     </div>
-                </li>
-            </ul>
-        </main>
+                    <div class="tax-facts">
+                        <div class="fact-row">
+                            <span>Roblox fee (30%)</span>
+                            <strong id="feeDisplay">0 R$</strong>
+                        </div>
+                        <div class="fact-row">
+                            <span>Gross sale price</span>
+                            <span class="fact-value">
+                                <strong id="grossDisplay">0 R$</strong>
+                                <button class="icon-btn copy-btn" id="grossCopyBtn" type="button" title="Copy" aria-label="Copy gross Robux">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <button class="text-btn" id="clearTaxBtn" type="button" hidden>Clear</button>
+                </div>
+            </section>
 
-        <footer class="rate-bar">
-            <div class="rate-line">
-                <span class="devex-chip" id="devexChip">1 R$ = $0.0038</span>
-                <span class="rate-exchange">
-                    <span aria-hidden="true">1 USD =</span>
-                    <label class="visually-hidden" for="tryRateInput">TRY exchange rate per USD</label>
-                    <input type="number" id="tryRateInput" class="rate-input" value="46.00" step="0.01" min="0.01" inputmode="decimal">
-                    <span aria-hidden="true">TRY</span>
-                    <button class="icon-btn refresh-btn" id="refreshRateBtn" type="button" title="Refresh exchange rate" aria-label="Refresh exchange rate">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 3v6h-6"></path></svg>
-                    </button>
-                </span>
-            </div>
-            <button class="status-line" id="resetRateBtn" type="button" hidden>
-                <span class="rate-dot is-default" id="rateDot" aria-hidden="true"></span>
-                <span class="rate-status" id="rateStatusText">Checking live rate</span>
-            </button>
-            <details class="estimate-details">
-                <summary>How estimates work</summary>
-                <p>DevEx pays a fixed $0.0038 per Robux with a 30,000 R$ minimum. TRY values use the live USD/TRY rate from open.er-api.com. Final eligibility and payouts are determined by Roblox.</p>
-            </details>
-        </footer>
+            <section class="panel panel-rates" aria-label="Exchange rates">
+                <div class="rate-line">
+                    <span class="devex-chip" id="devexChip">1 R$ = $0.0038</span>
+                    <span class="rate-exchange">
+                        <span aria-hidden="true">1 USD =</span>
+                        <label class="visually-hidden" for="tryRateInput">TRY exchange rate per USD</label>
+                        <input type="number" id="tryRateInput" class="rate-input" value="46.00" step="0.01" min="0.01" inputmode="decimal">
+                        <span aria-hidden="true">TRY</span>
+                        <button class="icon-btn refresh-btn" id="refreshRateBtn" type="button" title="Refresh exchange rate" aria-label="Refresh exchange rate">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 3v6h-6"></path></svg>
+                        </button>
+                    </span>
+                </div>
+                <button class="status-line" id="resetRateBtn" type="button" hidden>
+                    <span class="rate-dot is-default" id="rateDot" aria-hidden="true"></span>
+                    <span class="rate-status" id="rateStatusText">Checking live rate</span>
+                </button>
+                <details class="estimate-details">
+                    <summary>How estimates work</summary>
+                    <p>DevEx pays a fixed $0.0038 per Robux with a 30,000 R$ minimum. TRY values use the live USD/TRY rate from open.er-api.com. Final eligibility and payouts are determined by Roblox.</p>
+                </details>
+            </section>
+        </main>
 
         <div class="toast" id="toast" role="status" aria-live="polite"></div>
         <div class="visually-hidden" id="liveAnnounce" aria-live="polite" aria-atomic="true"></div>
     </div>
 
-    <script src="app.js?v=57"></script>
+    <script src="app.js?v=58"></script>
 </body>
 </html>
