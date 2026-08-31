@@ -222,7 +222,7 @@ const applyTheme = (theme, persist = false) => {
     root.dataset.theme = theme;
     themeToggle.setAttribute('aria-pressed', String(theme === 'light'));
     themeToggle.setAttribute('aria-label', theme === 'light' ? 'Use dark theme' : 'Use light theme');
-    metaThemeColor.content = theme === 'light' ? '#f2ede2' : '#121417';
+    metaThemeColor.content = theme === 'light' ? '#f2ede2' : '#0e0f14';
 
     if (persist) {
         setStoredItem(STORAGE_KEYS.theme, theme);

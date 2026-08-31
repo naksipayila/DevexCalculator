@@ -13,7 +13,7 @@
 ## CSS (`style.css`)
 
 - kebab-case classes, `is-*` prefix for state classes (`is-active`, `is-zero`, `is-stale`).
-- All colors, radii, shadows as `:root` tokens; light theme only overrides tokens under `:root[data-theme="light"]` plus a few icon rules.
+- All colors, radii, shadows as `:root` tokens; dark is the `:root` default, light overrides tokens under `:root[data-theme="light"]` plus a few icon rules. Theme-scoped component rules (`:root[data-theme="dark"] ...`) are allowed when token shifts alone cannot carry a theme, and must never affect the other theme.
 - Visibility toggled by the `hidden` attribute, not display classes.
 - Interaction styles gated behind `@media (hover: hover)`; touch and reduced-motion variants in separate media queries.
 

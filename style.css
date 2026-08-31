@@ -6,23 +6,23 @@
 
 :root {
     color-scheme: dark;
-    --bg: #121417;
-    --surface: #1c2026;
-    --surface-soft: #171b21;
-    --surface-raised: #262c36;
-    --ink: #f2f3f6;
-    --line: #e6e9ef;
-    --line-soft: rgba(230, 233, 239, 0.24);
-    --text-muted: #aab2c0;
-    --text-soft: #8b94a3;
-    --text-faint: #6b7484;
-    --accent: #ffd400;
-    --accent-ink: #14161a;
-    --accent-soft: rgba(255, 212, 0, 0.14);
-    --danger: #ff5c5c;
-    --success: #3ddc97;
-    --warning: #ffb020;
-    --shadow-c: #05070a;
+    --bg: #0e0f14;
+    --surface: #191b23;
+    --surface-soft: #14161d;
+    --surface-raised: #232632;
+    --ink: #f2f1ea;
+    --line: #565b6b;
+    --line-soft: rgba(122, 128, 148, 0.45);
+    --text-muted: #b9bcc7;
+    --text-soft: #8f93a1;
+    --text-faint: #6a6e7c;
+    --accent: #ffc93c;
+    --accent-ink: #17120a;
+    --accent-soft: rgba(255, 201, 60, 0.12);
+    --danger: #ff6b6b;
+    --success: #43d9a3;
+    --warning: #ffa04d;
+    --shadow-c: #000000;
     --shadow-hard: 5px 5px 0 var(--shadow-c);
     --shadow-sm: 3px 3px 0 var(--shadow-c);
     --shadow-btn: 2px 2px 0 var(--shadow-c);
@@ -843,6 +843,11 @@ input:focus-visible {
         min-height: 3.1rem;
         gap: 0.55rem;
     }
+}
+
+:root[data-theme="dark"] .panel {
+    border-width: 3px;
+    box-shadow: 6px 6px 0 var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
